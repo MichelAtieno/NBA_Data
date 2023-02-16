@@ -31,8 +31,8 @@ async def scrape_game(standings_file):
         with open(save_path, "w+") as f:
             f.write(html)
 
-## Filters out any files that are not appropriate
-# standings_files = [for s in standings_files if ".html" in s] 
+# Filters out any files that are not appropriate
+standings_files = [s for s in standings_files if ".html" in s] 
 
 for f in standings_files:
     filepath = os.path.join(STANDINGS_DIR, f)
