@@ -26,7 +26,7 @@ gamelog_devbooker = playergamelog.PlayerGameLog(player_id="1626164", season="202
 gamelog_devbooker_df = gamelog_devbooker.get_data_frames()[0]
 # print(gamelog_devbooker_df)
 
-#How to retrieve log about All seasons played by adding SeasonAll parameter
+#How to retrieve log about player's All seasons played by adding SeasonAll parameter
 gamelog_devbooker_all = playergamelog.PlayerGameLog(player_id="1626164", season=SeasonAll.all)
 gamelog_devbooker_all_df = gamelog_devbooker_all.get_data_frames()[0]
 # print(gamelog_devbooker_all_df)
