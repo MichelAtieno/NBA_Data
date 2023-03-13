@@ -17,13 +17,35 @@ def home(request):
 
 def active_player_data(request):
     all_players = players.get_players()
-    # print(all_players
     active_players = [player for player in all_players if player["is_active"] == True]
     context = {
         'active_players' :  active_players 
     }
     return render(request, "active_players.html", context)
-    
+
+def get_one_season_player(request, id, season:str):
+    one_season_game_log = playergamelog.PlayerGameLog(player_id=id, season=season)
+    one_season_game_log = one_season_game_log.get_data_frames()[0]
+    one_season_game_log_list = one_season_game_log.to_dict('records')
+
+   
+    context = {
+        "one_season_game_log_list":  one_season_game_log_list,
+    }
+        
+    return render(request, "player_info_one_season.html", context)
+
+def get_all_seasons_player(request, id):
+    all_seasons_game_log = playergamelog.PlayerGameLog(player_id=id, season=SeasonAll.all)
+    all_seasons_game_log =  all_seasons_game_log.get_data_frames()[0]
+    all_seasons_game_log_list = all_seasons_game_log.to_dict('records')
+    # print(all_seasons_game_log_list)
+
+    context = {
+        "all_seasons_game_log_list": all_seasons_game_log_list
+    }
+
+    return render(request, "player_info_all_seasons.html", context)
 
 def team_data(request):
     all_teams = teams.get_teams()
