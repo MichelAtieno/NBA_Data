@@ -1,5 +1,5 @@
 from nba_api.stats.static import teams, players
-from nba_api.stats.endpoints import playercareerstats, leaguegamelog, playergamelog, leaguegamefinder
+from nba_api.stats.endpoints import commonplayerinfo ,playercareerstats, leaguegamelog, playergamelog, leaguegamefinder
 from nba_api.stats.library.parameters import SeasonAll
 from nba_api.live.nba.endpoints import scoreboard
 import pandas as pd
@@ -16,9 +16,9 @@ for player in player_dict:
 #Team Data
 teams = teams.get_teams()
 # print(teams)
-all_teams = []
-for team in teams:
-    print(team["id"], team["full_name"])
+# all_teams = []
+# for team in teams:
+#     print(team["id"], team["full_name"])
 
 
 #How to retrieve log about player from playergamelog endpoint for particular season
@@ -32,11 +32,21 @@ gamelog_devbooker_all_df = gamelog_devbooker_all.get_data_frames()[0]
 # print(gamelog_devbooker_all_df)
 
 #How to retrieve all games from a specific team using leagegamefinder endpoint
-Phoenix_games = leaguegamefinder.LeagueGameFinder(team_id_nullable=1610612756).get_data_frames()[0]
-print(Phoenix_games.columns)
+phoenix_games = leaguegamefinder.LeagueGameFinder(team_id_nullable=1610612756).get_data_frames()[0]
+print(phoenix_games.head(50))
+
+#How to retrieve game logs from regular season
+#You have to specify team_id or player_id
+all_games = leaguegamefinder.LeagueGameFinder(team_id_nullable=1610612756, season_nullable="2020-2021", league_id_nullable="00", season_type_nullable="Regular Season")
+games = all_games.get_data_frames()[0]
+# print(games)
 
 
-career = playercareerstats.PlayerCareerStats(player_id="203999")
+#How to get career stats about player 
+career = playercareerstats.PlayerCareerStats(player_id="1626164")
+career_stats = career.get_data_frames()[0]
+# print(career_stats)
+
 # pandas data frames (optional: pip install pandas)
 career.get_data_frames()[0]
 
@@ -46,8 +56,6 @@ career.get_json()
 # dictionary
 career.get_dict()
 
-# print(career)
-# print(career.get_data_frames()[0])
 # print(career.get_json())
 # print(career.get_dict())
 
@@ -87,3 +95,8 @@ for key, value in games_dict.items():
 # print(new_all_league_games.head())
 # print(new_all_league_games.tail())
 # print(new_all_league_games.columns)
+
+# How to get player information
+player_info = commonplayerinfo.CommonPlayerInfo(player_id="1626164", timeout=100)
+player_info = player_info.common_player_info.get_data_frame()
+# print(player_info)

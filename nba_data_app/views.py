@@ -23,12 +23,18 @@ def active_player_data(request):
     }
     return render(request, "active_players.html", context)
 
+def player_profile(request):
+    context = {
+       
+    }
+    return render(request, "home.html", context)
+
+
 def get_one_season_player(request, id, season:str):
     one_season_game_log = playergamelog.PlayerGameLog(player_id=id, season=season)
     one_season_game_log = one_season_game_log.get_data_frames()[0]
     one_season_game_log_list = one_season_game_log.to_dict('records')
 
-   
     context = {
         "one_season_game_log_list":  one_season_game_log_list,
     }

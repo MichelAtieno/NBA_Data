@@ -1,8 +1,0 @@
-.home_page{
-    display:flex;
-    flex-direction: row;
-}
-
-.home_page p{
-    color:green;
-}

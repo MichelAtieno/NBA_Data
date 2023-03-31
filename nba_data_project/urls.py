@@ -20,7 +20,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("nba_data_app.urls", namespace="nba_data_app"))
+    path('api/', include("nba_data_app.urls", namespace="nba_data_app")),
+    path('', include("react_frontend.urls", namespace="react_frontend"))
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
