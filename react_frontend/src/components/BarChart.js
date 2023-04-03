@@ -2,6 +2,7 @@ import React, {useRef, useEffect, useState } from 'react';
 import { select, axisBottom, scaleLinear, axisRight, scaleBand } from "d3";
 import './App.css';
 
+
 function BarChart({data}) {
   const svgRef = useRef();
   

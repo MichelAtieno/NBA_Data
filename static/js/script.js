@@ -78,7 +78,7 @@ function ticked() {
         .attr("y2", function(d){
             return d.target.y;
         });
-    console.log(simulation.alpha());  
+    // console.log(simulation.alpha());  
 }
 
 function dragstarted(d) {
@@ -98,4 +98,6 @@ function dragended(d) {
     d.fx = null;
     d.fy = null;
 }
+
+   
 

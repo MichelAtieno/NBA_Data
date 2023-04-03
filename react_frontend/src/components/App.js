@@ -2,9 +2,16 @@ import React, { useState } from 'react';
 import { render } from "react-dom";
 import BarChart from './BarChart';
 import './App.css';
+import nba from 'nba';
 
 export default function App() {
     const [data, setData] = useState([25, 30, 45, 60, 20, 65, 75]);
+
+    const NBA = require("nba");
+    const dev_book = NBA.findPlayer("Devin Booker")
+    console.log(dev_book)
+ 
+
     return (
         <React.Fragment>
             <div className="container">

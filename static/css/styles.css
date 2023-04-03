@@ -7,3 +7,12 @@
     color:green;
 }
 
+svg rect {
+    fill: lightcoral;
+}
+
+svg text {
+    fill: black;
+    font: 20px sans-serif;
+    text-anchor: end;
+}
