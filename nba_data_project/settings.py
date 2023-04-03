@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'nba_data_app'
+    'nba_data_app',
+    'react_frontend.apps.ReactFrontendConfig'
 ]
 
 MIDDLEWARE = [
