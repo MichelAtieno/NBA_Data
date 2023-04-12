@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <h1>Player Data</h1>
+        <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last Name</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for p in active_players %}
+              <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.full_name }}</td>
+                <td>{{ p.first_name }}</td>
+                <td>{{ p.last_name }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+      var received_data = {{ active_players | safe }};
+      console.log(received_data);
+    </script>
+{% endblock %}
+
