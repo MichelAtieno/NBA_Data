@@ -1,4 +1,4 @@
-.home_page{
+/* .home_page{
     display:flex;
     flex-direction: row;
 }
@@ -15,4 +15,21 @@ svg text {
     fill: black;
     font: 20px sans-serif;
     text-anchor: end;
+} */
+
+.row {
+    display: flex;
+    flex-direction: row;
 }
+
+.row .col-5 {
+    
+}
+
+/* .conference-header th{
+    font-size: 30px;
+}
+
+.conference-info td{
+    font-size: 5px;
+} */

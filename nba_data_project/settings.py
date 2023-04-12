@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nba_data_app',
-    'react_frontend.apps.ReactFrontendConfig'
+    'react_frontend.apps.ReactFrontendConfig',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
