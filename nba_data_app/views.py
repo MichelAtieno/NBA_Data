@@ -17,7 +17,7 @@ def home(request):
     # games = scoreboardv2.ScoreboardV2(game_date=date.today())
     # games = games.game_header.get_data_frame()
     # games = games.available.get_data_frame()
-    games = scoreboardv2.ScoreboardV2(game_date="2023-04-11")
+    games = scoreboardv2.ScoreboardV2()
     #line_Score endpoint
     games_line_score = games.line_score.get_data_frame()
     new_scoreboard_ = games_line_score.groupby(["GAME_SEQUENCE","GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join })

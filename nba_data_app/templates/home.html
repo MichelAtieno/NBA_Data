@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+{% include "topside.html" %}
+<h1>Hello</h1>
+
+    <!-- <div>
+        <h1></h1>
+        
+    </div>
+
+    <div>
+        
+    </div> -->
+    <!-- <svg id="svgID" width="640" height="480"></svg> -->
+
+    <!-- <script type="text/javascript">
+        var received_data = {{ all_teams | safe }};
+        console.log(received_data);
+
+        for (let value of Object.values(received_data)) {
+            console.log(value.id)
+            // console.log(value.full_name)
+            // console.log(value.abbreviation)
+            // console.log(value.nickname)
+            // console.log(value.city)
+            // console.log(value.state)
+            // console.log(value.year_founded)
+        }
+
+
+        var margin  = {top: 20, right: 20, bottom: 100, left: 60},
+                       width   = 600 - margin.left - margin.right,
+                       height  = 400 - margin.top - margin.bottom,
+                       x       = d3.scale.ordinal().rangeRoundBands([0,width], 0.5),
+                       y       = d3.scale.linear().range([height,0]);
+
+        var svg = d3.select("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        d3.json({{ received_data }}, function (data)
+                {
+                    x.domain(data.map(function (d)
+                    {
+                        return d.name;
+                    }));
+
+                    y.domain([0, d3.max(data, function (d)
+                    {
+                        return d.wc;
+                    })]);
+
+                    svg.append("g")
+                        .attr("class", "x axis")
+                        .attr("transform", "translate(0, " + height + ")")
+                        .call(xAxis)
+                        .selectAll("text")
+                        .style("text-anchor", "middle")
+                        .attr("dx", "-0.5em")
+                        .attr("dy", "-.55em")
+                        .attr("y", 30)
+                        .attr("transform", "rotate(0)" );
+                    
+                    svg.append("g")
+                        .attr("class", "y axis")
+                        .call(yAxis)
+                        .append("text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", 5)
+                        .attr("dy", "0.8em")
+                        .attr("text-anchor", "end")
+                        .text("Word Count");
+
+                    svg.selectAll("bar")
+                        .data(data)
+                        .enter()
+                        .append("rect")
+                        .style("fill", "orange")
+                        .attr("x", function(d)
+                        {
+                            return x(d.name);
+                        })
+                        .attr("width", x.rangeBand())
+                        .attr("y", function (d)
+                        {
+                            return y(d.wc);
+                        })
+                        .attr("height", function (d)
+                        {
+                            return height - y(d.wc);
+                        })
+                })
+    </script>
+     -->
+
+{% endblock %}

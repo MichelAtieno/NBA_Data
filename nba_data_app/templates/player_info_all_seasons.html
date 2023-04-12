@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <h1>Player data for all seasons</h1>
+        <table class="table">
+            <thead class="thead-dark">
+              <tr>
+               
+                <th scope="col">Season ID</th>
+                <th scope="col">Player ID</th>
+                <th scope="col">Game ID</th>
+                <th scope="col">Game_Date</th>
+                <th scope="col">Match_up</th>
+                <th scope="col">Win/Loss</th>
+                <th scope="col">MIN</th>
+                <th scope="col">FGM</th>
+                <th scope="col">FGA</th>
+                <th scope="col">FG3A</th>
+                <th scope="col">FG3_PCT</th>
+                <th scope="col">FTM</th>
+                <th scope="col">FTA</th>
+                <th scope="col">FT_PCT</th>
+                <th scope="col">OREB</th>
+                <th scope="col">DREB</th>
+                <th scope="col">REB</th>
+                <th scope="col">AST</th>
+                <th scope="col">STL</th>
+                <th scope="col">BLK</th>
+                <th scope="col">TOV</th>
+                <th scope="col">PF</th>
+                <th scope="col">PTS</th>
+                <th scope="col">PLUS_MINUS</th>
+                <th scope="col">VIDEO_AVALIABLE</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for game in all_seasons_game_log_list %}
+            
+              <tr>
+                <td>{{ game.SEASON_ID }}</td>
+                <td>{{ game.Player_ID }}</td>
+                <td>{{ game.Game_ID }}</td>
+                <td>{{ game.GAME_DATE }}</td>
+                <td>{{ game.MATCHUP }}</td>
+                <td>{{ game.WL }}</td>
+                <td>{{ game.MIN }}</td>
+                <td>{{ game.FGM }}</td>
+                <td>{{ game.FGA }}</td>
+                <td>{{ game.FG3A }}</td>
+                <td>{{ game.FG3_PCT }}</td>
+                <td>{{ game.FTM }}</td>
+                <td>{{ game.FTA }}</td>
+                <td>{{ game.FT_PCT }}</td>
+                <td>{{ game.OREB }}</td>
+                <td>{{ game.DREB }}</td>
+                <td>{{ game.REB }}</td>
+                <td>{{ game.AST }}</td>
+                <td>{{ game.STL }}</td>
+                <td>{{ game.BLK }}</td>
+                <td>{{ game.TOV }}</td>
+                <td>{{ game.PF }}</td>
+                <td>{{ game.PTS }}</td>
+                <td>{{ game.PLUS_MINUS }}</td>
+                <td>{{ game.VIDEO_AVAILABLE }}</td>
+              </tr>
+            
+            {% endfor %}
+            </tbody>
+          </table>
+    </div>
+   
+{% endblock %}
