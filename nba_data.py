@@ -84,7 +84,7 @@ team_dets_df = team_dets.team_retired.get_data_frame()
 #How to retrieve all games from a specific team using leagegamefinder endpoint
 phoenix_games = leaguegamefinder.LeagueGameFinder(team_id_nullable=1610612756)
 phoenix_games_df = phoenix_games.league_game_finder_results.get_data_frame()
-# print(phoenix_games_df.head(50))
+print(phoenix_games_df.head(50))
 
 
 #BoxScore Details
@@ -121,9 +121,9 @@ games = scoreboardv2.ScoreboardV2()
 games = scoreboardv2.ScoreboardV2()
 games = games.get_dict()
 games_df = pd.DataFrame([games])
-print(games_df.columns)
+# print(games_df.columns)
 # print(games_df[["resultSets"]])
-print(games_df[["parameters"]])
+# print(games_df[["parameters"]])
 # games_list = games_df.to_dict('records')
 # print(games_list)
 # games_df = games.get_data_frame()

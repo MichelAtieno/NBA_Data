@@ -22,7 +22,7 @@
         
           <tr>
             <td>{{ t.id }}</td>
-            <td>{{ t.full_name }}</td>
+            <td><a href="{% url 'nba_data_app:team_profile' id=t.id %}" >{{ t.full_name }}</a></td>
             <td>{{ t.abbreviation }}</td>
             <td>{{ t.nickname }}</td>
             <td>{{ t.city }}</td>
