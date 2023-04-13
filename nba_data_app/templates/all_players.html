@@ -17,7 +17,7 @@
             {% for p in active_players %}
               <tr>
                 <td>{{ p.id }}</td>
-                <td>{{ p.full_name }}</td>
+                <td><a href="{% url 'nba_data_app:player_profile' id=p.id %}" >{{ p.full_name }}</a></td>
                 <td>{{ p.first_name }}</td>
                 <td>{{ p.last_name }}</td>
               </tr>
@@ -25,9 +25,9 @@
             </tbody>
         </table>
     </div>
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
       var received_data = {{ active_players | safe }};
       console.log(received_data);
-    </script>
+    </script> -->
 {% endblock %}
 
