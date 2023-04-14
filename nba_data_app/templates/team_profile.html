@@ -4,6 +4,7 @@
 {% block content %}
     <div>
     <br>
+    <h3>LAST TEN GAMES</h3>
     <table class="table">
         <thead class="thead-dark">
         <tr>
@@ -12,7 +13,6 @@
             <th scope="col">MatchUp</th>
             <th scope="col">WL</th>
             <th scope="col">MIN</th>
-            <th scope="col">PTS</th>
             <th scope="col">FGPCT</th>
             <th scope="col">FG3PCT</th>
             <th scope="col">REB</th>
@@ -20,6 +20,7 @@
             <th scope="col">STL</th>
             <th scope="col">BLK</th>
             <th scope="col">TOV</th>
+            <th scope="col">PTS</th>
         </tr>
         </thead>
         <tbody>
@@ -30,7 +31,6 @@
             <td>{{ tg.MATCHUP  }}</td>
             <td>{{ tg.WL }}</td>
             <td>{{ tg.MIN }}</td>
-            <td>{{ tg.PTS }}</td>
             <td>{{ tg.FG_PCT }}</td>
             <td>{{ tg.FG3_PCT}}</td>
             <td>{{ tg.REB }}</td>
@@ -38,35 +38,92 @@
             <td>{{ tg.STL }}</td>
             <td>{{ tg.BLK }}</td>
             <td>{{ tg.TOV }}</td>
-            
+            <td>{{ tg.PTS }}</td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
     </div>
     <div>
-        {{ team_background }}
+        <h3>TEAM BACKGROUND</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">ABBR</th>
+                <th scope="col">YEARFOUNDED</th>
+                <th scope="col">CITY</th>
+                <th scope="col">ARENA</th>
+                <th scope="col">ARENACAP</th>
+                <th scope="col">OWNER</th>
+                <th scope="col">GM</th>
+                <th scope="col">HEADCOACH</th>
+                <th scope="col">DLEAGUEAFFIL</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for tb in team_background %}
+            <tr>
+                <td>{{ tb.ABBREVIATION }}</td>
+                <td>{{ tb.YEARFOUNDED }}</td>
+                <td>{{ tb.CITY }}</td>
+                <td>{{ tb.ARENA }}</td>
+                <td>{{ tb.ARENACAPACITY }}</td>
+                <td>{{ tb.OWNER }}</td>
+                <td>{{ tb.GENERALMANAGER }}</td>
+                <td>{{ tb.HEADCOACH }}</td>
+                <td>{{ tb.DLEAGUEAFFILIATION }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
     <div>
-        {{ years_stats }}
+        <h3>YEARLY STATS SUMMARY</h3>
+       <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">YEAR</th>
+            <th scope="col">W</th>
+            <th scope="col">L</th>
+            <th scope="col">W_PCT</th>
+            <th scope="col">C_RANK</th>
+            <th scope="col">D_RANK</th>
+            <th scope="col">FINALS</th>
+            <th scope="col">FG_PCT</th>
+            <th scope="col">FG3_PCT</th>
+            <th scope="col">REB</th>
+            <th scope="col">AST</th>
+            <th scope="col">STL</th>
+            <th scope="col">TOV</th>
+            <th scope="col">BLK</th>
+            <th scope="col">PTS</th>
+            <th scope="col">PTS_RANK</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ys in years_stats %}
+            <tr>
+                <td>{{ ys.YEAR }}</td>
+                <td>{{ ys.WINS }} </td>
+                <td>{{ ys.LOSSES }}</td>
+                <td>{{ ys.WIN_PCT }}</td>
+                <td>{{ ys.CONF_RANK }}</td>
+                <td>{{ ys.DIV_RANK }} </td>
+                <td>{{ ys.NBA_FINALS_APPEARANCE }}</td>
+                <td>{{ ys.FG_PCT }}</td>
+                <td>{{ ys.FG3_PCT }}</td>
+                <td>{{ ys.REB }}</td>
+                <td>{{ ys.AST }}</td>
+                <td>{{ ys.STL }}</td>
+                <td>{{ ys.TOV }} </td>
+                <td>{{ ys.BLK }}</td>
+                <td>{{ ys.PTS }}</td>
+                <td>{{ ys.PTS_RANK }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     </div>
-    <div>
-        {{ team_awards_championships }}
-    </div>
-    <div>
-        {{ team_awards_conf }}
-    </div>
-    <div>
-        {{ team_awards_div }}
-    </div>
-    <div>
-        {{ team_history }}
-    </div>
-    <div>
-        {{ team_hof }}
-    </div>
-    <div>
-        {{ team_retired }}
-    </div>
+   
     
 {% endblock %}
