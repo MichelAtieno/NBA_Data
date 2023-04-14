@@ -3,35 +3,328 @@
 
 {% block content %}
     <div>
-     {{ next_game }}
+     {% for pi in player_info %}
+     <div>
+        <h3> <b>{{ pi.full_name | upper }}</b></h3>
+     </div>
+     <div>
+     <a href="{% url 'nba_data_app:get_one_season_playergamelog' id=pi.id season=year %}">Current Season log</a>
     </div>
-    <br>
     <div>
-    {{ totals_pre_season }}
+        <a href="{% url 'nba_data_app:get_all_seasons_playergamelog' id=pi.id %}">All Seasons log</a>
     </div>
-    <br>
     <div>
-        {{ totals_regular_season }}
+        <a href="{% url 'nba_data_app:player_dashboard' id=pi.id %}">Player Dashboard</a>
+    </div>
+
+     {% endfor %}
+   
+    
     </div>
     <br>
+
     <div>
-        {{ totals_post_season }}
+     <h3>NEXT GAME</h3>
+     <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">GAME_ID</th>
+            <th scope="col">GAME_DATE</th>
+            <th scope="col">GAME_TIME</th>
+            <th scope="col">LOCATION</th>
+            <th scope="col">VS_TEAM_ABBR</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ng in next_game %}
+        <tr>
+            <td>{{ ng.GAME_ID }}</td>
+            <td>{{ ng.GAME_DATE }}</td>
+            <td>{{ ng.GAME_TIME }}</td>
+            <td>{{ ng.LOCATION }}</td>
+            <td>{{ ng.VS_TEAM_ABBREVIATION }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     </div>
+
     <br>
+
     <div>
-        {{ career_highs }}
+    <h3>PRESEASON STATS</h3>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">SEASON</th>
+            <th scope="col">ABBR</th>
+            <th scope="col">AGE</th>
+            <th scope="col">GP</th>
+            <th scope="col">GS</th>
+            <th scope="col">MIN</th>
+            <th scope="col">FG_PCT</th>
+            <th scope="col">FG3_PCT</th>
+            <th scope="col">FT_PCT</th>
+            <th scope="col">REB</th>
+            <th scope="col">AST</th>
+            <th scope="col">STL</th>
+            <th scope="col">BLK</th>
+            <th scope="col">TOV</th>
+            <th scope="col">PF</th>
+            <th scope="col">PTS</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tps in totals_pre_season %}
+        <tr>
+            <td>{{ tps.SEASON_ID }}</td>
+            <td>{{ tps.TEAM_ABBREVIATION }}</td>
+            <td>{{ tps.PLAYER_AGE }}</td>
+            <td>{{ tps.GP }}</td>
+            <td>{{ tps.GS }}</td>
+            <td>{{ tps.MIN }}</td>
+            <td>{{ tps.FG_PCT }}</td>
+            <td>{{ tps.FG3_PCT }}</td>
+            <td>{{ tps.FT_PCT }}</td>
+            <td>{{ tps.REB }}</td>
+            <td>{{ tps.AST }}</td>
+            <td>{{ tps.STL }}</td>
+            <td>{{ tps.BLK }}</td>
+            <td>{{ tps.TOV }}</td>
+            <td>{{ tps.PF }}</td>
+            <td>{{ tps.PTS }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
     </div>
+
     <br>
+
+    <div>
+        <h3>REGULAR SEASON STATS</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">SEASON</th>
+                <th scope="col">ABBR</th>
+                <th scope="col">AGE</th>
+                <th scope="col">GP</th>
+                <th scope="col">GS</th>
+                <th scope="col">MIN</th>
+                <th scope="col">FG_PCT</th>
+                <th scope="col">FG3_PCT</th>
+                <th scope="col">FT_PCT</th>
+                <th scope="col">REB</th>
+                <th scope="col">AST</th>
+                <th scope="col">STL</th>
+                <th scope="col">BLK</th>
+                <th scope="col">TOV</th>
+                <th scope="col">PF</th>
+                <th scope="col">PTS</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for trs in totals_regular_season %}
+            <tr>
+                <td>{{ trs.SEASON_ID }}</td>
+                <td>{{ trs.TEAM_ABBREVIATION }}</td>
+                <td>{{ trs.PLAYER_AGE }}</td>
+                <td>{{ trs.GP }}</td>
+                <td>{{ trs.GS }}</td>
+                <td>{{ trs.MIN }}</td>
+                <td>{{ trs.FG_PCT }}</td>
+                <td>{{ trs.FG3_PCT }}</td>
+                <td>{{ trs.FT_PCT }}</td>
+                <td>{{ trs.REB }}</td>
+                <td>{{ trs.AST }}</td>
+                <td>{{ trs.STL }}</td>
+                <td>{{ trs.BLK }}</td>
+                <td>{{ trs.TOV }}</td>
+                <td>{{ trs.PF }}</td>
+                <td>{{ trs.PTS }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+       <h3>POST SEASON STATS</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">SEASON</th>
+                <th scope="col">ABBR</th>
+                <th scope="col">AGE</th>
+                <th scope="col">GP</th>
+                <th scope="col">GS</th>
+                <th scope="col">MIN</th>
+                <th scope="col">FG_PCT</th>
+                <th scope="col">FG3_PCT</th>
+                <th scope="col">FT_PCT</th>
+                <th scope="col">REB</th>
+                <th scope="col">AST</th>
+                <th scope="col">STL</th>
+                <th scope="col">BLK</th>
+                <th scope="col">TOV</th>
+                <th scope="col">PF</th>
+                <th scope="col">PTS</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for tpss in totals_post_season %}
+            <tr>
+                <td>{{ tpss.SEASON_ID }}</td>
+                <td>{{ tpss.TEAM_ABBREVIATION }}</td>
+                <td>{{ tpss.PLAYER_AGE }}</td>
+                <td>{{ tpss.GP }}</td>
+                <td>{{ tpss.GS }}</td>
+                <td>{{ tpss.MIN }}</td>
+                <td>{{ tpss.FG_PCT }}</td>
+                <td>{{ tpss.FG3_PCT }}</td>
+                <td>{{ tpss.FT_PCT }}</td>
+                <td>{{ tpss.REB }}</td>
+                <td>{{ tpss.AST }}</td>
+                <td>{{ tpss.STL }}</td>
+                <td>{{ tpss.BLK }}</td>
+                <td>{{ tpss.TOV }}</td>
+                <td>{{ tpss.PF }}</td>
+                <td>{{ tpss.PTS }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    <br>
+
+    <!-- <div>
+       <h3>CAREER HIGHS</h3>
+       <table class="table">
+           <thead class="thead-dark">
+           <tr>
+               <th scope="col">GAME_DATE</th>
+               <th scope="col">VS_TEAM_ID</th>
+               <th scope="col">VS_TEAM_ABBR</th>
+               <th scope="col">STAT</th>
+               <th scope="col">STATS_VALUE</th>
+               <th scope="col">STAT_ORDER</th>
+               <th scope="col">DATE_EST</th>
+           </tr>
+           </thead>
+           <tbody>
+           {% for c in career_highs %}
+           <tr>
+               <td>{{ c.GAME_DATE}}</td>
+               <td>{{ c.VS_TEAM_ID }}</td>
+               <td>{{ c.VS_TEAM_ABBREVIATION }}</td>
+               <td>{{ c.STAT }}</td>
+               <td>{{ c.STATS_VALUE }}</td>
+               <td>{{ c.STAT_ORDER }}</td>
+               <td>{{ c.DATE_EST }}</td>
+           </tr>
+           {% endfor %}
+           </tbody>
+       </table>
+
+    </div>
+
+    <br>
+
     <div>
         {{ season_highs }}
     </div>
-    <br>
+    <br> -->
     <div>
-        {{ rankings_post_season }}
+        <h3>RANKINGS REGULAR SEASON</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">SEASON</th>
+                <th scope="col">ABBR</th>
+                <th scope="col">MIN</th>
+                <th scope="col">FG_PCT</th>
+                <th scope="col">FG3_PCT</th>
+                <th scope="col">FT_PCT</th>
+                <th scope="col">REB</th>
+                <th scope="col">AST</th>
+                <th scope="col">STL</th>
+                <th scope="col">BLK</th>
+                <th scope="col">TOV</th>
+                <th scope="col">PTS</th>
+                <th scope="col">EFF</th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            {% for rrs in rankings_regular_season %}
+            <tr>
+                <td>{{ rrs.SEASON_ID }}</td>
+                <td>{{ rrs.TEAM_ABBREVIATION }}</td>
+                <td>{{ rrs.RANK_MIN }}</td>
+                <td>{{ rrs.RANK_FG_PCT }}</td>
+                <td>{{ rrs.RANK_FG3_PCT }}</td>
+                <td>{{ rrs.RANK_FT_PCT }}</td>
+                <td>{{ rrs.RANK_REB }}</td>
+                <td>{{ rrs.RANK_AST }}</td>
+                <td>{{ rrs.RANK_STL }}</td>
+                <td>{{ rrs.RANK_BLK }}</td>
+                <td>{{ rrs.RANK_TOV }}</td>
+                <td>{{ rrs.RANK_PTS }}</td>
+                <td>{{ rrs.RANK_EFF }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    <div>
+        <h3>RANKINGS POST SEASON</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">SEASON</th>
+                <th scope="col">ABBR</th>
+                <th scope="col">MIN</th>
+                <th scope="col">FG_PCT</th>
+                <th scope="col">FG3_PCT</th>
+                <th scope="col">FT_PCT</th>
+                <th scope="col">REB</th>
+                <th scope="col">AST</th>
+                <th scope="col">STL</th>
+                <th scope="col">BLK</th>
+                <th scope="col">TOV</th>
+                <th scope="col">PTS</th>
+                <th scope="col">EFF</th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            {% for rps in rankings_post_season %}
+            <tr>
+                <td>{{ rps.SEASON_ID }}</td>
+                <td>{{ rps.TEAM_ABBREVIATION }}</td>
+                <td>{{ rps.RANK_MIN }}</td>
+                <td>{{ rps.RANK_FG_PCT }}</td>
+                <td>{{ rps.RANK_FG3_PCT }}</td>
+                <td>{{ rps.RANK_FT_PCT }}</td>
+                <td>{{ rps.RANK_REB }}</td>
+                <td>{{ rps.RANK_AST }}</td>
+                <td>{{ rps.RANK_STL }}</td>
+                <td>{{ rps.RANK_BLK }}</td>
+                <td>{{ rps.RANK_TOV }}</td>
+                <td>{{ rps.RANK_PTS }}</td>
+                <td>{{ rps.RANK_EFF }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
     <br>
-    <div>
-        {{ rankings_regular_season }}
-    </div>
 
 {% endblock %}

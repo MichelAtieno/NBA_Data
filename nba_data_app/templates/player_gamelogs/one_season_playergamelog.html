@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}     
+       <div>
+        <h3>CURRENT YEAR GAME LOG</h3>
+        <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">SEASON</th>
+                <th scope="col">GAME_ID</th>
+                <th scope="col">GAME_DATE</th>
+                <th scope="col">MATCHUP</th>
+                <th scope="col">WL</th>
+                <th scope="col">MIN</th>
+                <th scope="col">FG_PCT </th>
+                <th scope="col">FG3_PCT</th>
+                <th scope="col">REB</th>
+                <th scope="col">AST</th>
+                <th scope="col">STL</th>
+                <th scope="col">BLK</th>
+                <th scope="col">TOV</th>
+                <th scope="col">PF</th>
+                <th scope="col">PTS</th>
+              </tr>
+            </thead>
+            <tbody>
+             {% for glcs in game_log_curr_season_df %}
+              <tr>
+                <td>{{ glcs.SEASON_ID }}</td>
+                <td>{{ glcs.Game_ID }}</td>
+                <td>{{ glcs.GAME_DATE }}</td>
+                <td>{{ glcs.MATCHUP }}</td>
+                <td>{{ glcs.WL }}</td>
+                <td>{{ glcs.MIN }}</td>
+                <td>{{ glcs.FG_PCT }}</td>
+                <td>{{ glcs.FG3_PCT }}</td>
+                <td>{{ glcs.REB }}</td>
+                <td>{{ glcs.AST }}</td>
+                <td>{{ glcs.STL }}</td>
+                <td>{{ glcs.BLK }}</td>
+                <td>{{ glcs.TOV}}</td>
+                <td>{{ glcs.PF}}</td>
+                <td>{{ glcs.PTS }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+  
+
+{% endblock %}

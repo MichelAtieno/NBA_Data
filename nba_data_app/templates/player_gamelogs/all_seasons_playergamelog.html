@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}     
+       <div>
+        <h3>ALL SEASONS GAME LOG</h3>
+        <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">SEASON</th>
+                <th scope="col">GAME_ID</th>
+                <th scope="col">GAME_DATE</th>
+                <th scope="col">MATCHUP</th>
+                <th scope="col">WL</th>
+                <th scope="col">MIN</th>
+                <th scope="col">FG_PCT </th>
+                <th scope="col">FG3_PCT</th>
+                <th scope="col">REB</th>
+                <th scope="col">AST</th>
+                <th scope="col">STL</th>
+                <th scope="col">BLK</th>
+                <th scope="col">TOV</th>
+                <th scope="col">PF</th>
+                <th scope="col">PTS</th>
+              </tr>
+            </thead>
+            <tbody>
+             {% for glas in game_log_all_seasons %}
+              <tr>
+                <td>{{ glas.SEASON_ID }}</td>
+                <td>{{ glas.Game_ID }}</td>
+                <td>{{ glas.GAME_DATE }}</td>
+                <td>{{ glas.MATCHUP }}</td>
+                <td>{{ glas.WL }}</td>
+                <td>{{ glas.MIN }}</td>
+                <td>{{ glas.FG_PCT }}</td>
+                <td>{{ glas.FG3_PCT }}</td>
+                <td>{{ glas.REB }}</td>
+                <td>{{ glas.AST }}</td>
+                <td>{{ glas.STL }}</td>
+                <td>{{ glas.BLK }}</td>
+                <td>{{ glas.TOV}}</td>
+                <td>{{ glas.PF}}</td>
+                <td>{{ glas.PTS }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+  
+
+{% endblock %}

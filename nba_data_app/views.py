@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from nba_api.stats.static import teams, players
-from nba_api.stats.endpoints import playercareerstats, playergamelog, leaguegamefinder, scoreboardv2, boxscoresummaryv2, playerprofilev2, teamdetails, teamyearbyyearstats, playerawards, playerdashboardbyyearoveryear, leaguegamefinder,  boxscoretraditionalv2
+from nba_api.stats.endpoints import playercareerstats, playergamelog, leaguegamefinder, scoreboardv2, boxscoresummaryv2, playerprofilev2, teamdetails, teamyearbyyearstats, playerawards, playerdashboardbyyearoveryear, leaguegamefinder,  boxscoretraditionalv2, playernextngames
 from nba_api.stats.library.parameters import SeasonAll
 import json
 import time
@@ -16,6 +16,7 @@ import itertools
 def active_player_data(request):
     all_players = players.get_players()
     active_players = [player for player in all_players if player["is_active"] == True]
+
     context = {
         'active_players' : active_players
     }
@@ -32,7 +33,7 @@ def team_data(request):
 def box_score_data(request, id):
     game_box_score = boxscoretraditionalv2.BoxScoreTraditionalV2(game_id=id)
     player_stats_df = game_box_score.player_stats.get_data_frame().fillna(0)
-    print(player_stats_df.columns)
+    # print(player_stats_df.columns)
     team_stats_df = game_box_score.team_stats.get_data_frame().fillna(0)
     starter_bench_stats_df = game_box_score.team_starter_bench_stats.get_data_frame().fillna(0)
     # print(team_stats_df.columns)
@@ -49,7 +50,7 @@ def home(request):
     # games = scoreboardv2.ScoreboardV2(game_date=date.today())
     # games = games.game_header.get_data_frame()
     # games = games.available.get_data_frame()
-    games = scoreboardv2.ScoreboardV2(game_date="2023-04-15")
+    games = scoreboardv2.ScoreboardV2()
     #line_Score endpoint
     games_line_score = games.line_score.get_data_frame()
     new_scoreboard_ = games_line_score.groupby(["GAME_SEQUENCE","GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join })
@@ -68,10 +69,6 @@ def home(request):
         # print(merged_df)
         newest_scoreboard = merged_df.groupby(["GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join, 'ATTENDANCE' : 'sum'})
         new_list.append(newest_scoreboard.to_dict('records'))
-    # print(new_list)
-    # for l in new_list:
-    #     for m in l:
-    #         print(m["TEAM_CITY_NAME"])
     
     context = {
         'scoreboard' : new_list
@@ -106,6 +103,35 @@ def scoreboard_data(request, game_date):
 
     return render(request, "scoreboard.html", context)
 
+def get_one_season_playergamelog(request,id, season):
+    game_log_curr_season = playergamelog.PlayerGameLog(player_id=id, season=season)
+    game_log_curr_season_df = game_log_curr_season.player_game_log.get_data_frame()
+
+    context = {
+        "game_log_curr_season_df" : game_log_curr_season_df.to_dict('records')
+    }
+    return render(request, "player_gamelogs/one_season_playergamelog.html", context )
+
+def get_all_seasons_player_gamelog(request, id):
+    game_log_all_seasons = playergamelog.PlayerGameLog(player_id=id, season=SeasonAll.all)
+    game_log_all_seasons_df = game_log_all_seasons.player_game_log.get_data_frame()
+
+    context = {
+        "game_log_all_seasons" : game_log_all_seasons_df.to_dict('records')
+    }
+    return render(request, "player_gamelogs/all_seasons_playergamelog.html", context)
+
+def get_player_dashboard(request, id):
+    load_stats = playerdashboardbyyearoveryear.PlayerDashboardByYearOverYear(player_id=id)
+    per_year_stats_df = load_stats.by_year_player_dashboard.get_data_frame()
+    current_year_stats_df =load_stats.overall_player_dashboard.get_data_frame()
+
+    context = {
+        "per_year_stats" :  per_year_stats_df.to_dict('records'),
+        "current_year_stats" : current_year_stats_df.to_dict('records'),
+    }
+    return render(request, "player_dashboard.html" ,context)
+
 
 def player_profile(request, id):
     profile = playerprofilev2.PlayerProfileV2(player_id=id)
@@ -113,69 +139,65 @@ def player_profile(request, id):
     totals_pre_season_df = profile.season_totals_preseason.get_data_frame()
     totals_regular_season_df = profile.season_totals_regular_season.get_data_frame()
     totals_post_season_df = profile.season_totals_post_season.get_data_frame()
-    career_highs_df = profile.career_highs.get_data_frame()
-    season_highs_df = profile.season_highs.get_data_frame()
-    rankings_post_season_df = profile.season_rankings_post_season.get_data_frame()
-    rankings_regular_season_df = profile.season_rankings_regular_season.get_data_frame()
+    rankings_regular_season_df = profile.season_rankings_regular_season.get_data_frame().fillna(0)
+    rankings_post_season_df = profile.season_rankings_post_season.get_data_frame().fillna(0)
+    # career_highs_df = profile.career_highs.get_data_frame()
+    # season_highs_df = profile.season_highs.get_data_frame()
 
     today = datetime.now()
     year = today.year
-    game_log_curr_season = playergamelog.PlayerGameLog(player_id=id, season=year-1)
-    game_log_curr_season_df = game_log_curr_season.player_game_log.get_data_frame()
-
-    game_log_all_seasons = playergamelog.PlayerGameLog(player_id=id, season=SeasonAll.all)
-    game_log_all_seasons_df = game_log_all_seasons.player_game_log.get_data_frame()
-
+    player_id = list(totals_pre_season_df["PLAYER_ID"])
+    player_id = list(set(player_id))
+    all_players = players.get_players()
+    player_info = {}
+    for player in all_players:
+        for p in player_id:
+            if player["id"] == p:
+                player_info.update(player)
+    new_player_info = pd.DataFrame(player_info, index=pd.Series(player_info.pop("is_active")), columns=["id", "full_name", "first_name", "last_name"])
+ 
     player_awards = playerawards.PlayerAwards(player_id=id)
     player_awards_df = player_awards.player_awards.get_data_frame()
 
     career_stats = playercareerstats.PlayerCareerStats(per_mode36="PerGame", player_id=id)
     career_stats_regular_season_df = career_stats.career_totals_regular_season.get_data_frame()
 
-    load_stats = playerdashboardbyyearoveryear.PlayerDashboardByYearOverYear(player_id=id)
-    per_year_stats_df = load_stats.by_year_player_dashboard.get_data_frame()
-    current_year_stats_df =load_stats.overall_player_dashboard.get_data_frame()
-    # print(load_stats_df[["TEAM_ABBREVIATION", "MAX_GAME_DATE", "GP", "W", "L", "W_PCT", "MIN",  "REB", "AST", "TOV", "STL", "BLK", "BLKA", "PF", "PFD", "PTS"]])
-    # print(load_stats_df.columns)
 
     context = {
        "next_game" : next_game_df.to_dict('records'),
        "totals_pre_season" : totals_pre_season_df.to_dict('records'),
        "totals_regular_season" : totals_regular_season_df.to_dict('records'),
        "totals_post_season" : totals_post_season_df.to_dict('records'),
-       "career_highs" :  career_highs_df.to_dict('records'),
-       "season_highs" : season_highs_df.to_dict('records'),
        "rankings_post_season" : rankings_post_season_df.to_dict('records'),
        "rankings_regular_season" : rankings_regular_season_df.to_dict('records'),
-
-       "game_log_curr_season" : game_log_curr_season_df.to_dict('records'),
-       "game_log_all_seasons" : game_log_all_seasons_df.to_dict('records'),
-
        "player_awards" : player_awards_df.to_dict('records'),
        "career_stats_regular_season" : career_stats_regular_season_df.to_dict('records'),
-       "per_year_stats" :  per_year_stats_df.to_dict('records'),
-       "current_year_stats" : current_year_stats_df.to_dict('records'),
+       "player_info" : new_player_info.to_dict("records"),
+       "year" : year - 1
+
+    #    "career_highs" :  career_highs_df.to_dict('records'),
+    #    "season_highs" : season_highs_df.to_dict('records'),
 
     }
     return render(request, "player_profile.html", context)
 
 def team_profile(request, id):
     team_dets = teamdetails.TeamDetails(team_id=id)
+    team_history_df = team_dets.team_history.get_data_frame()
+    team_background_df = team_dets.team_background.get_data_frame()
     team_awards_championships_df = team_dets.team_awards_championships.get_data_frame()
     team_awards_conf_df = team_dets.team_awards_conf.get_data_frame()
     team_awards_div_df = team_dets.team_awards_div.get_data_frame()
-    team_history_df = team_dets.team_history.get_data_frame()
-    team_background_df = team_dets.team_background.get_data_frame()
     team_hof_df = team_dets.team_hof.get_data_frame()
     team_retired_df = team_dets.team_retired.get_data_frame()
 
     years = teamyearbyyearstats.TeamYearByYearStats(team_id=id)
-    years_stats_df = years.team_stats.get_data_frame()
+    years_stats_df = years.team_stats.get_data_frame().fillna(0)
+    years_stats_df = years_stats_df.tail(10)
 
     team_games = leaguegamefinder.LeagueGameFinder(team_id_nullable=id)
     team_games_df = team_games.league_game_finder_results.get_data_frame()
     team_games_df = team_games_df.head(10)
-    # print(team_games_df.columns)
 
     context = {
         "team_awards_championships" : team_awards_championships_df.to_dict('records'),
