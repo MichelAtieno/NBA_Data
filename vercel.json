@@ -8,7 +8,9 @@
 
         "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" },
 
-        "excludeFiles": "virtual/**"
+        "api/**/*.py": {
+            "excludeFiles": "public/**"
+          }
           
     }],
 
