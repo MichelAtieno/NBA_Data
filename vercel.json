@@ -9,14 +9,14 @@
         "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
 
     }],
-    
-    
+
+     
     "functions": {
         
         "pages/**/*": {
           "excludeFiles": "virtual/**"
         }
-      }
+    },
 
     "routes": [
 
