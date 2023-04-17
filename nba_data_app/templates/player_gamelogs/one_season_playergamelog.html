@@ -2,12 +2,49 @@
 {% load static %}
 
 {% block content %}     
+<head>
+  <style>
+      @media (min-width: 740px) and (max-width: 1200px)  {
+      table {
+        border: 3px solid #c5c1c3;
+      }
+
+      table thead tr{
+        display: none;
+      }
+      
+      table tr {
+        display: block;
+      }
+
+      table th, table td{
+        padding: .5em;
+      }
+
+      table td {
+        text-align: right;
+        display: block;
+        font-size: 1em;
+      }
+
+      table td::before {
+        content: attr(data-title) ": ";
+        float: left;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #eaeaea;
+      }
+    }
+
+  </style>
+</head>
+<body>
        <div>
         <h3>CURRENT YEAR GAME LOG</h3>
         <table class="table">
             <thead class="thead-dark">
               <tr>
-                <th scope="col">SEASON</th>
                 <th scope="col">GAME_ID</th>
                 <th scope="col">GAME_DATE</th>
                 <th scope="col">MATCHUP</th>
@@ -27,26 +64,25 @@
             <tbody>
              {% for glcs in game_log_curr_season_df %}
               <tr>
-                <td>{{ glcs.SEASON_ID }}</td>
-                <td>{{ glcs.Game_ID }}</td>
-                <td>{{ glcs.GAME_DATE }}</td>
-                <td>{{ glcs.MATCHUP }}</td>
-                <td>{{ glcs.WL }}</td>
-                <td>{{ glcs.MIN }}</td>
-                <td>{{ glcs.FG_PCT }}</td>
-                <td>{{ glcs.FG3_PCT }}</td>
-                <td>{{ glcs.REB }}</td>
-                <td>{{ glcs.AST }}</td>
-                <td>{{ glcs.STL }}</td>
-                <td>{{ glcs.BLK }}</td>
-                <td>{{ glcs.TOV}}</td>
-                <td>{{ glcs.PF}}</td>
-                <td>{{ glcs.PTS }}</td>
+                <td data-title="GAME_ID"><a href="{% url 'nba_data_app:box_score_data' id=glcs.Game_ID %}">{{ glcs.Game_ID }}</a></td>
+                <td data-title="GAME">{{ glcs.GAME_DATE }}</td>
+                <td data-title="MATCHUP">{{ glcs.MATCHUP }}</td>
+                <td data-title="WL">{{ glcs.WL }}</td>
+                <td data-title="MIN">{{ glcs.MIN }}</td>
+                <td data-title="FG_PCT">{{ glcs.FG_PCT }}</td>
+                <td data-title="FG">{{ glcs.FG3_PCT }}</td>
+                <td data-title="REB">{{ glcs.REB }}</td>
+                <td data-title="AST">{{ glcs.AST }}</td>
+                <td data-title="STL">{{ glcs.STL }}</td>
+                <td data-title="BLK">{{ glcs.BLK }}</td>
+                <td data-title="TOV">{{ glcs.TOV}}</td>
+                <td data-title="PF">{{ glcs.PF}}</td>
+                <td data-title="PTS">{{ glcs.PTS }}</td>
               </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
   
-
+  </body>
 {% endblock %}

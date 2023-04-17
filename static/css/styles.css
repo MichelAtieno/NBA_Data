@@ -17,19 +17,77 @@ svg text {
     text-anchor: end;
 } */
 
-.row {
+/* .r ow {
     display: flex;
     flex-direction: row;
-}
+} */
 
-.row .col-5 {
+/* .row .col-5 {
     
-}
+} */
 
 /* .conference-header th{
     font-size: 30px;
 }
 
-.conference-info td{
     font-size: 5px;
 } */
+
+table {
+    border-collapse: collapse;
+    margin: 0;
+    width: 100%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .25);
+  }
+
+  table tr {
+    padding: .45em;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #eaeaea;
+  }
+
+  table th,
+  table td {
+    font-size: 1em;
+    padding: 1em;
+    text-align: center;
+  }
+
+  thead th{
+   font-size: 1.15em;
+  }
+
+  @media (min-width: 0px) and (max-width: 740px)  {
+    table {
+      border: 3px solid #c5c1c3;
+    }
+
+    table thead tr{
+      display: none;
+    }
+    
+    table tr {
+      display: block;
+    }
+
+    table th, table td{
+      padding: .5em;
+    }
+
+    table td {
+      text-align: right;
+      display: block;
+      font-size: 1em;
+    }
+
+    table td::before {
+      content: attr(data-title) ": ";
+      float: left;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #eaeaea;
+    }
+  }

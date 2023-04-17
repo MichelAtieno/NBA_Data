@@ -14,13 +14,51 @@
 'PF_RANK', 'PFD_RANK', 'PTS_RANK', 'PLUS_MINUS_RANK',
 'NBA_FANTASY_PTS_RANK', 'DD2_RANK', 'TD3_RANK',
 'WNBA_FANTASY_PTS_RANK' -->
+<head>
+    <style>
+        @media (min-width: 740px) and (max-width: 1200px)  {
+        table {
+          border: 3px solid #c5c1c3;
+        }
+  
+        table thead tr{
+          display: none;
+        }
+        
+        table tr {
+          display: block;
+        }
+  
+        table th, table td{
+          padding: .5em;
+        }
+  
+        table td {
+          text-align: right;
+          display: block;
+          font-size: 1em;
+        }
+  
+        table td::before {
+          content: attr(data-title) ": ";
+          float: left;
+        }
+  
+        tbody tr:nth-child(even) {
+          background-color: #eaeaea;
+        }
+      }
+  
+    </style>
+</head>
+<body>
         <div>
             <h3>CURRENT YEAR STATS</h3>
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">GROUP_VALUE</th>
-                    <th scope="col">ABBR</th>
+                    <th scope="col">SEASON</th>
+                    <th scope="col">TEAM</th>
                     <th scope="col">MAX_GAME_DATE</th>
                     <th scope="col">GP</th>
                     <th scope="col">W</th>
@@ -43,24 +81,24 @@
                
                 {% for cys in current_year_stats %}
                 <tr>
-                    <td>{{ cys.GROUP_VALUE }}</td>
-                    <td>{{ cys.TEAM_ABBREVIATION }}</td>
-                    <td>{{ cys.MAX_GAME_DATE  }}</td>
-                    <td>{{ cys.GP }}</td>
-                    <td>{{ cys.W }}</td>
-                    <td>{{ cys.L }}</td>
-                    <td>{{ cys.W_PCT }}</td>
-                    <td>{{ cys.MIN }}</td>
-                    <td>{{ cys.FG_PCT }}</td>
-                    <td>{{ cys.FG3_PCT }}</td>
-                    <td>{{ cys.FT_PCT }}</td>
-                    <td>{{ cys.REB }}</td>
-                    <td>{{ cys.AST }}</td>
-                    <td>{{ cys.STL }}</td>
-                    <td>{{ cys.BLK }}</td>
-                    <td>{{ cys.TOV }}</td>
-                    <td>{{ cys.PF }}</td>
-                    <td>{{ cys.PTS }}</td>
+                    <td data-title="SEASON">{{ cys.GROUP_VALUE }}</td>
+                    <td data-title="TEAM">{{ cys.TEAM_ABBREVIATION }}</td>
+                    <td data-title="MAX_GAME_DATE">{{ cys.MAX_GAME_DATE  }}</td>
+                    <td data-title="GP">{{ cys.GP }}</td>
+                    <td data-title="W">{{ cys.W }}</td>
+                    <td data-title="L">{{ cys.L }}</td>
+                    <td data-title="W_PCT">{{ cys.W_PCT }}</td>
+                    <td data-title="MIN">{{ cys.MIN }}</td>
+                    <td data-title="FG_PCT">{{ cys.FG_PCT }}</td>
+                    <td data-title="FG3_PCT">{{ cys.FG3_PCT }}</td>
+                    <td data-title="FT_PCT">{{ cys.FT_PCT }}</td>
+                    <td data-title="REB">{{ cys.REB }}</td>
+                    <td data-title="AST">{{ cys.AST }}</td>
+                    <td data-title="STL">{{ cys.STL }}</td>
+                    <td data-title="BLK">{{ cys.BLK }}</td>
+                    <td data-title="TOV">{{ cys.TOV }}</td>
+                    <td data-title="PF">{{ cys.PF }}</td>
+                    <td data-title="PTS">{{ cys.PTS }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -72,8 +110,8 @@
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">GROUP_VALUE</th>
-                    <th scope="col">ABBR</th>
+                    <th scope="col">SEASON</th>
+                    <th scope="col">TEAM</th>
                     <th scope="col">MAX_GAME_DATE</th>
                     <th scope="col">GP</th>
                     <th scope="col">W</th>
@@ -96,31 +134,31 @@
                
                 {% for cys in per_year_stats %}
                 <tr>
-                    <td>{{ cys.GROUP_VALUE }}</td>
-                    <td>{{ cys.TEAM_ABBREVIATION }}</td>
-                    <td>{{ cys.MAX_GAME_DATE  }}</td>
-                    <td>{{ cys.GP }}</td>
-                    <td>{{ cys.W }}</td>
-                    <td>{{ cys.L }}</td>
-                    <td>{{ cys.W_PCT }}</td>
-                    <td>{{ cys.MIN }}</td>
-                    <td>{{ cys.FG_PCT }}</td>
-                    <td>{{ cys.FG3_PCT }}</td>
-                    <td>{{ cys.FT_PCT }}</td>
-                    <td>{{ cys.REB }}</td>
-                    <td>{{ cys.AST }}</td>
-                    <td>{{ cys.STL }}</td>
-                    <td>{{ cys.BLK }}</td>
-                    <td>{{ cys.TOV }}</td>
-                    <td>{{ cys.PF }}</td>
-                    <td>{{ cys.PTS }}</td>
+                    <td data-title="SEASON">{{ cys.GROUP_VALUE }}</td>
+                    <td data-title="TEAM">{{ cys.TEAM_ABBREVIATION }}</td>
+                    <td data-title="MAX_GAME_DATE">{{ cys.MAX_GAME_DATE  }}</td>
+                    <td data-title="GP">{{ cys.GP }}</td>
+                    <td data-title="W">{{ cys.W }}</td>
+                    <td data-title="L">{{ cys.L }}</td>
+                    <td data-title="W_PCT">{{ cys.W_PCT }}</td>
+                    <td data-title="MIN">{{ cys.MIN }}</td>
+                    <td data-title="FG_PCT">{{ cys.FG_PCT }}</td>
+                    <td data-title="FG3_PCT">{{ cys.FG3_PCT }}</td>
+                    <td data-title="FT_PCT">{{ cys.FT_PCT }}</td>
+                    <td data-title="REB">{{ cys.REB }}</td>
+                    <td data-title="AST">{{ cys.AST }}</td>
+                    <td data-title="STL">{{ cys.STL }}</td>
+                    <td data-title="BLK">{{ cys.BLK }}</td>
+                    <td data-title="TOV">{{ cys.TOV }}</td>
+                    <td data-title="PF">{{ cys.PF }}</td>
+                    <td data-title="PTS">{{ cys.PTS }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div> 
        
-       
+    </body>     
     
 
 {% endblock %}

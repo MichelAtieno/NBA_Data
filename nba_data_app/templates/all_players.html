@@ -2,6 +2,11 @@
 {% load static %}
 
 {% block content %}
+<head>
+  
+
+</head>
+<body>
     <div>
         <h1>PLAYERS</h1>
         <table class="table">
@@ -9,22 +14,23 @@
               <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Full Name</th>
-                <th scope="col">First name</th>
+                <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
               </tr>
             </thead>
             <tbody>
             {% for p in active_players %}
               <tr>
-                <td>{{ p.id }}</td>
-                <td><a href="{% url 'nba_data_app:player_profile' id=p.id %}" >{{ p.full_name }}</a></td>
-                <td>{{ p.first_name }}</td>
-                <td>{{ p.last_name }}</td>
+                <td data-title="ID">{{ p.id }}</td>
+                <td data-title="Full Name"><a href="{% url 'nba_data_app:player_profile' id=p.id %}" >{{ p.full_name }}</a></td>
+                <td data-title="First Name">{{ p.first_name }}</td>
+                <td data-title="Last Name">{{ p.last_name }}</td>
               </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+</body>
     <!-- <script type="text/javascript">
       var received_data = {{ active_players | safe }};
       console.log(received_data);

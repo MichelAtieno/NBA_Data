@@ -2,12 +2,50 @@
 {% load static %}
 
 {% block content %}
+<head>
+  <style>
+     @media (min-width: 740px) and (max-width: 990px)  {
+        table {
+          border: 3px solid #c5c1c3;
+        }
+  
+        table thead tr{
+          display: none;
+        }
+        
+        table tr {
+          display: block;
+        }
+  
+        table th, table td{
+          padding: .5em;
+        }
+  
+        table td {
+          text-align: right;
+          display: block;
+          font-size: 1em;
+        }
+  
+        table td::before {
+          content: attr(data-title) ": ";
+          float: left;
+        }
+  
+        tbody tr:nth-child(even) {
+          background-color: #eaeaea;
+        }
+      }
+  </style>
+</head>
+<body>
+<h2><b>BOX SCORE DATA</b></h2>
 <div>
+  <h3>TEAM STATS</h3>
     <table class="table">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">TEAM_ABBR</th>
-
+            <th scope="col">TEAM</th>
             <th scope="col">MIN</th>
             <th scope="col">FG_PCT </th>
             <th scope="col">FG3_PCT</th>
@@ -23,17 +61,17 @@
         <tbody>
          {% for ts in team_stats %}
           <tr>
-            <td>{{ ts.TEAM_ABBREVIATION }}</td>
-            <td>{{ ts.MIN }}</td>
-            <td>{{ ts.FG_PCT }}</td>
-            <td>{{ ts.FG3_PCT }}</td>
-            <td>{{ ts.REB }}</td>
-            <td>{{ ts.AST }}</td>
-            <td>{{ ts.STL }}</td>
-            <td>{{ ts.BLK }}</td>
-            <td>{{ ts.TO }}</td>
-            <td>{{ ts.PTS }}</td>
-            <td>{{ ts.PLUS_MINUS }}</td>
+            <td data-title="TEAM">{{ ts.TEAM_ABBREVIATION }}</td>
+            <td data-title="MIN">{{ ts.MIN }}</td>
+            <td data-title="FG_PCT">{{ ts.FG_PCT }}</td>
+            <td data-title="FG3_PCT">{{ ts.FG3_PCT }}</td>
+            <td data-title="REB">{{ ts.REB }}</td>
+            <td data-title="AST">{{ ts.AST }}</td>
+            <td data-title="STL">{{ ts.STL }}</td>
+            <td data-title="BLK">{{ ts.BLK }}</td>
+            <td data-title="TO">{{ ts.TO }}</td>
+            <td data-title="PTS">{{ ts.PTS }}</td>
+            <td data-title="PLUS_MINUS">{{ ts.PLUS_MINUS }}</td>
           </tr>
         {% endfor %}
         </tbody>
@@ -42,10 +80,11 @@
 <br>
 
 <div>
+  <h3>STARTERS_BENCH STATS</h3>
     <table class="table">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">TEAM_ABBR</th>
+            <th scope="col">TEAM</th>
             <th scope="col">START_BENCH</th>
             <th scope="col">MIN</th>
             <th scope="col">FG_PCT </th>
@@ -62,17 +101,17 @@
         <tbody>
          {% for sbs in starter_bench_stats %}
           <tr>
-            <td>{{ sbs.TEAM_ABBREVIATION }}</td>
-            <td>{{ sbs.STARTERS_BENCH}}</td>
-            <td>{{ sbs.MIN }}</td>
-            <td>{{ sbs.FG_PCT }}</td>
-            <td>{{ sbs.FG3_PCT }}</td>
-            <td>{{ sbs.REB }}</td>
-            <td>{{ sbs.AST }}</td>
-            <td>{{ sbs.STL }}</td>
-            <td>{{ sbs.BLK }}</td>
-            <td>{{ sbs.TO }}</td>
-            <td>{{ sbs.PTS }}</td>
+            <td data-title="TEAM">{{ sbs.TEAM_ABBREVIATION }}</td>
+            <td data-title="START_BENCH">{{ sbs.STARTERS_BENCH}}</td>
+            <td data-title="MIN">{{ sbs.MIN }}</td>
+            <td data-title="FG_PCT">{{ sbs.FG_PCT }}</td>
+            <td data-title="FG3_PCT">{{ sbs.FG3_PCT }}</td>
+            <td data-title="REB">{{ sbs.REB }}</td>
+            <td data-title="AST">{{ sbs.AST }}</td>
+            <td data-title="STL">{{ sbs.STL }}</td>
+            <td data-title="BLK">{{ sbs.BLK }}</td>
+            <td data-title="TO">{{ sbs.TO }}</td>
+            <td data-title="PTS">{{ sbs.PTS }}</td>
             
           </tr>
         {% endfor %}
@@ -82,10 +121,11 @@
 
 <br>
 <div>
+<h3>PLAYER STATS</h3>
 <table class="table">
     <thead class="thead-dark">
       <tr>
-        <th scope="col">TEAM_ABBR</th>
+        <th scope="col">TEAM</th>
         <th scope="col">PLAYER_NAME</th>
         <th scope="col">START_POSITION</th>
         <th scope="col">MIN</th>
@@ -102,22 +142,24 @@
     <tbody>
      {% for ps in player_stats %}
       <tr>
-        <td>{{ ps.TEAM_ABBREVIATION }}</td>
-        <td><a href="{% url 'nba_data_app:player_profile' id=ps.PLAYER_ID %}">{{ ps.PLAYER_NAME }}</a></td>
-        <td>{{ ps.START_POSITION }}</td>
-        <td>{{ ps.MIN }}</td>
-        <td>{{ ps.FG_PCT }}</td>
-        <td>{{ ps.FG3_PCT }}</td>
-        <td>{{ ps.REB }}</td>
-        <td>{{ ps.AST }}</td>
-        <td>{{ ps.STL }}</td>
-        <td>{{ ps.BLK }}</td>
-        <td>{{ ps.TO }}</td>
-        <td>{{ ps.PTS }}</td>
+        <td data-title="TEAM">{{ ps.TEAM_ABBREVIATION }}</td>
+        <td data-title="PLAYER_NAME"><a href="{% url 'nba_data_app:player_profile' id=ps.PLAYER_ID %}">{{ ps.PLAYER_NAME }}</a></td>
+        <td data-title="START_POSITION">{{ ps.START_POSITION }}</td>
+        <td data-title="MIN">{{ ps.MIN }}</td>
+        <td data-title="FG_PCT">{{ ps.FG_PCT }}</td>
+        <td data-title="FG3_PCT">{{ ps.FG3_PCT }}</td>
+        <td data-title="REB">{{ ps.REB }}</td>
+        <td data-title="AST">{{ ps.AST }}</td>
+        <td data-title="STL">{{ ps.STL }}</td>
+        <td data-title="BLK">{{ ps.BLK }}</td>
+        <td data-title="TO">{{ ps.TO }}</td>
+        <td data-title="PTS">{{ ps.PTS }}</td>
       </tr>
     {% endfor %}
     </tbody>
 </table>
 
 </div>
+
+</body>
 {% endblock %}

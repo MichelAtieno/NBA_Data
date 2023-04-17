@@ -1,7 +1,45 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}     
+{% block content %}    
+<head>
+  <style>
+      @media (min-width: 740px) and (max-width: 1200px)  {
+      table {
+        border: 3px solid #c5c1c3;
+      }
+
+      table thead tr{
+        display: none;
+      }
+      
+      table tr {
+        display: block;
+      }
+
+      table th, table td{
+        padding: .5em;
+      }
+
+      table td {
+        text-align: right;
+        display: block;
+        font-size: 1em;
+      }
+
+      table td::before {
+        content: attr(data-title) ": ";
+        float: left;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #eaeaea;
+      }
+    }
+
+  </style>
+</head>
+<body>
        <div>
         <h3>ALL SEASONS GAME LOG</h3>
         <table class="table">
@@ -27,26 +65,26 @@
             <tbody>
              {% for glas in game_log_all_seasons %}
               <tr>
-                <td>{{ glas.SEASON_ID }}</td>
-                <td>{{ glas.Game_ID }}</td>
-                <td>{{ glas.GAME_DATE }}</td>
-                <td>{{ glas.MATCHUP }}</td>
-                <td>{{ glas.WL }}</td>
-                <td>{{ glas.MIN }}</td>
-                <td>{{ glas.FG_PCT }}</td>
-                <td>{{ glas.FG3_PCT }}</td>
-                <td>{{ glas.REB }}</td>
-                <td>{{ glas.AST }}</td>
-                <td>{{ glas.STL }}</td>
-                <td>{{ glas.BLK }}</td>
-                <td>{{ glas.TOV}}</td>
-                <td>{{ glas.PF}}</td>
-                <td>{{ glas.PTS }}</td>
+                <td data-title="SEASON">{{ glas.SEASON_ID }}</td>
+                <td data-title="GAME_ID"><a href="{% url 'nba_data_app:box_score_data' id=glas.Game_ID %}">{{ glas.Game_ID }}</a></td>
+                <td data-title="GAME_DATE">{{ glas.GAME_DATE }}</td>
+                <td data-title="MATCHUP">{{ glas.MATCHUP }}</td>
+                <td data-title="WL">{{ glas.WL }}</td>
+                <td data-title="MIN">{{ glas.MIN }}</td>
+                <td data-title="FG_PCT">{{ glas.FG_PCT }}</td>
+                <td data-title="FG3_PCT">{{ glas.FG3_PCT }}</td>
+                <td data-title="REB">{{ glas.REB }}</td>
+                <td data-title="AST">{{ glas.AST }}</td>
+                <td data-title="STL">{{ glas.STL }}</td>
+                <td data-title="BLK">{{ glas.BLK }}</td>
+                <td data-title="TOV">{{ glas.TOV}}</td>
+                <td data-title="PF">{{ glas.PF}}</td>
+                <td data-title="PTS">{{ glas.PTS }}</td>
               </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
   
-
+  </body> 
 {% endblock %}
