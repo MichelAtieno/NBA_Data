@@ -8,9 +8,8 @@
 
         "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" },
 
-        "pages/**/*": {
-            "excludeFiles": "virtual/**"
-          }
+        "excludeFiles": "virtual/**"
+          
 
     }],
 
