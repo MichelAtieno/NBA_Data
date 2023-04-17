@@ -7,8 +7,6 @@
     <table class="table">
         <thead class="thead-dark">
           <tr>
-           
-            <th scope="col">ID</th>
             <th scope="col">Full Name</th>
             <th scope="col">Abbreviation</th>
             <th scope="col">Nickname</th>
@@ -21,13 +19,12 @@
         {% for t in all_teams %}
         
           <tr>
-            <td>{{ t.id }}</td>
-            <td><a href="{% url 'nba_data_app:team_profile' id=t.id %}" >{{ t.full_name }}</a></td>
-            <td>{{ t.abbreviation }}</td>
-            <td>{{ t.nickname }}</td>
-            <td>{{ t.city }}</td>
-            <td>{{ t.state }}</td>
-            <td>{{ t.year_founded }}</td>
+            <td data-title="Full_name"><a href="{% url 'nba_data_app:team_profile' id=t.id %}" >{{ t.full_name }}</a></td>
+            <td data-title="Abbreviation">{{ t.abbreviation }}</td>
+            <td data-title="Nickname">{{ t.nickname }}</td>
+            <td data-title="City">{{ t.city }}</td>
+            <td data-title="State">{{ t.state }}</td>
+            <td data-title="Year Founded">{{ t.year_founded }}</td>
           </tr>
         
         {% endfor %}
