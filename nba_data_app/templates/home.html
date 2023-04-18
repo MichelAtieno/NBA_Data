@@ -3,8 +3,167 @@
 
 
 {% block content %}
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 
+    <style type="text/css">
+
+    .wrapper .radio_tabs {
+        height: 60px;
+        background: #fff;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        font-size: 20px;
+        padding: 18px;
+        display: flex;
+        box-shadow: 0,0,2px rgba(0,0,0,0.1);
+    }
+
+    .wrapper .radio_tabs label{
+        margin-right: 15px;
+        display: block;
+        position: relative;
+        cursor: pointer;
+        padding-left: 28px;
+
+    }
+
+    .wrapper .radio_tabs label .radio_mark:before{
+        content:"";
+        position: absolute;
+        top: 2px;
+        left: 0;
+        background: url("{% static 'images/radio_icon.png' %}") no-repeat 0 0;
+        width: 22px;
+        height: 22px;
+    }
+
+    .wrapper .radio_tabs label .input{
+        position: absolute;
+        top: 0;
+        right: 0;
+        opacity: 0;
+    }
+
+    .wrapper .radio_tabs label .input:checked ~ .radio_mark {
+        color: #ff5d66;
+    }
+
+    .wrapper .radio_tabs label .input:checked ~ .radio_mark:before {
+        background-position: 0 -23px; 
+        width: 22px;
+        height: 22px;
+    }
+
+    .wrapper .content {
+        width: 100%;
+        height: calc(100% - 70px);
+        background: #fff;
+        border-radius: 5px;
+        padding: 18px;
+        box-shadow: 0 0 2px rgba(0,0,0,0.1);
+    }
+
+    .wrapper .content p{
+        font-size: 15px;
+        line-height: 22px;
+        margin-bottom: 15px;
+    }
+    </style>
+
+</head>
 {% include "topside.html" %}
+<body>
+    <div class="wrapper">
+        <div class="radio_tabs">
+            <label class="radio_wrap" data-radio="radio_1">
+                <input type="radio" name="sports" class="input" checked>
+                <span class="radio_mark">
+                    Eastern Conference
+                </span>
+            </label>
+            <label class="radio_wrap" data-radio="radio_2 ">
+                <input type="radio" name="sports" class="input">
+                <span class="radio_mark">
+                    Western Conference
+                </span>
+            </label>
+        </div>
+
+        <div class="content">
+            <div class="radio_content radio_1">
+                <table class="table">
+                    <h4>Standings</h4>
+                    <thead class="thead-dark">
+                      <tr class="conference header">
+                        <th scope="col">TEAM</th>
+                        <th scope="col">G</th>
+                        <th scope="col">W</th>
+                        <th scope="col">L</th>
+                        <th scope="col">W_PCT</th>
+                        <th scope="col">HOME_RECORD</th>
+                        <th scope="col">ROAD_RECORD</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for s in eastern_conference_standings  %}
+                      <tr  class="conference info">
+                        <td data-title="TEAM"><b>{{ s.TEAM }}</b></td>
+                        <td data-title="G">{{ s.G }}</td>
+                        <td data-title="W">{{ s.W }}</td>
+                        <td data-title="L">{{ s.L }}</td>
+                        <td data-title="W_PCT">{{ s.W_PCT }}</td>
+                        <td data-title="HOME_RECORD">{{ s.HOME_RECORD }}</td>
+                        <td data-title="ROAD_RECORD">{{ s.ROAD_RECORD }}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="radio_content radio_2">
+                <table class="table">
+                    <h4>Standings</h4>
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">TEAM</th>
+                        <th scope="col">G</th>
+                        <th scope="col">W</th>
+                        <th scope="col">L</th>
+                        <th scope="col">W_PCT</th>
+                        <th scope="col">HOME_RECORD</th>
+                        <th scope="col">ROAD_RECORD</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for s in western_conference_standings  %}
+                      <tr>
+                        <td data-title="TEAM"><b>{{ s.TEAM }}</b></td>
+                        <td data-title="G">{{ s.G }}</td>
+                        <td data-title="W">{{ s.W }}</td>
+                        <td data-title="L">{{ s.L }}</td>
+                        <td data-title="W_PCT">{{ s.W_PCT }}</td>
+                        <td data-title="HOME_RECORD">{{ s.HOME_RECORD }}</td>
+                        <td data-title="ROAD_RECORD">{{ s.ROAD_RECORD }}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $(".content .radio_content").hide();
+            $(".content .radio_content:first-child").show();
+            $(".radio_wrap").click(function() {
+                var current_radio = $(this).attr("data-radio");
+                $(".content .radio_content").hide();
+                $("." + current_radio).show();
+            });
+        });
+    </script>
+
     <!-- <div>
         <h1></h1>
         
@@ -96,4 +255,5 @@
                 })
     </script>
      -->
+</body>
 {% endblock %}
