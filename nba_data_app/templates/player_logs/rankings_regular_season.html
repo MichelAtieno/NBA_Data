@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div>
+    <h3>RANKINGS REGULAR SEASON</h3>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">SEASON</th>
+            <th scope="col">TEAM</th>
+            <th scope="col">MIN</th>
+            <th scope="col">FG_PCT</th>
+            <th scope="col">FG3_PCT</th>
+            <th scope="col">FT_PCT</th>
+            <th scope="col">REB</th>
+            <th scope="col">AST</th>
+            <th scope="col">STL</th>
+            <th scope="col">BLK</th>
+            <th scope="col">TOV</th>
+            <th scope="col">PTS</th>
+            <th scope="col">EFF</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+        {% for rrs in rankings_regular_season %}
+        <tr>
+            <td data-title="SEASON">{{ rrs.SEASON_ID }}</td>
+            <td data-title="TEAM">{{ rrs.TEAM_ABBREVIATION }}</td>
+            <td data-title="MIN">{{ rrs.RANK_MIN }}</td>
+            <td data-title="FG_PCT">{{ rrs.RANK_FG_PCT }}</td>
+            <td data-title="FG3_PCT">{{ rrs.RANK_FG3_PCT }}</td>
+            <td data-title="FT_PCT">{{ rrs.RANK_FT_PCT }}</td>
+            <td data-title="REB">{{ rrs.RANK_REB }}</td>
+            <td data-title="AST">{{ rrs.RANK_AST }}</td>
+            <td data-title="STL">{{ rrs.RANK_STL }}</td>
+            <td data-title="BLK">{{ rrs.RANK_BLK }}</td>
+            <td data-title="TOV">{{ rrs.RANK_TOV }}</td>
+            <td data-title="PTS">{{ rrs.RANK_PTS }}</td>
+            <td data-title="EFF">{{ rrs.RANK_EFF }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

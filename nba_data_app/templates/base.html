@@ -78,6 +78,40 @@
           background-color: #eaeaea;
         }
       }
+
+      @media (min-width: 740px) and (max-width: 1200px)  {
+        table {
+          border: 3px solid #c5c1c3;
+        }
+  
+        table thead tr{
+          display: none;
+        }
+        
+        table tr {
+          display: block;
+        }
+  
+        table th, table td{
+          padding: .5em;
+        }
+  
+        table td {
+          text-align: right;
+          display: block;
+          font-size: 1em;
+        }
+  
+        table td::before {
+          content: attr(data-title) ": ";
+          float: left;
+        }
+  
+        tbody tr:nth-child(even) {
+          background-color: #eaeaea;
+        }
+      }
+  
   
   
     </style>

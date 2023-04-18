@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div>
+    <h3>REGULAR SEASON STATS</h3>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">SEASON</th>
+            <th scope="col">TEAM</th>
+            <th scope="col">AGE</th>
+            <th scope="col">GP</th>
+            <th scope="col">GS</th>
+            <th scope="col">MIN</th>
+            <th scope="col">FG_PCT</th>
+            <th scope="col">FG3_PCT</th>
+            <th scope="col">FT_PCT</th>
+            <th scope="col">REB</th>
+            <th scope="col">AST</th>
+            <th scope="col">STL</th>
+            <th scope="col">BLK</th>
+            <th scope="col">TOV</th>
+            <th scope="col">PF</th>
+            <th scope="col">PTS</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for trs in totals_regular_season %}
+        <tr>
+            <td data-title="SEASON">{{ trs.SEASON_ID }}</td>
+            <td data-title="TEAM">{{ trs.TEAM_ABBREVIATION }}</td>
+            <td data-title="AGE">{{ trs.PLAYER_AGE }}</td>
+            <td data-title="GP">{{ trs.GP }}</td>
+            <td data-title="GS">{{ trs.GS }}</td>
+            <td data-title="MIN">{{ trs.MIN }}</td>
+            <td data-title="FG_PCT">{{ trs.FG_PCT }}</td>
+            <td data-title="FG3_PCT">{{ trs.FG3_PCT }}</td>
+            <td data-title="FT_PCT">{{ trs.FT_PCT }}</td>
+            <td data-title="REB">{{ trs.REB }}</td>
+            <td data-title="AST">{{ trs.AST }}</td>
+            <td data-title="STL">{{ trs.STL }}</td>
+            <td data-title="BLK">{{ trs.BLK }}</td>
+            <td data-title="TOV">{{ trs.TOV }}</td>
+            <td data-title="PF">{{ trs.PF }}</td>
+            <td data-title="PTS">{{ trs.PTS }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

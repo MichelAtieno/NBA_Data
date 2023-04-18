@@ -72,8 +72,15 @@ def home(request):
         newest_scoreboard = merged_df.groupby(["GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join, 'ATTENDANCE' : 'sum'})
         new_list.append(newest_scoreboard.to_dict('records'))
     
-   
-    # print(date.today())
+    context = {
+        'scoreboard' : new_list,
+    #    'games_today' : games_df.to_dict('records'),
+    #    'params' : params.to_dict('records')
+    }
+    return render(request, "home.html", context)
+
+def conference_standings(request):
+     # print(date.today())
     standings = scoreboardv2.ScoreboardV2(game_date=date.today())
     #Conference standings at game_date
     eastern_conference_standings = standings.east_conf_standings_by_day.get_data_frame()
@@ -83,13 +90,11 @@ def home(request):
     western_conference_standings = western_conference_standings[['TEAM', 'G', 'W', 'L', 'W_PCT', 'HOME_RECORD', 'ROAD_RECORD'
             ]]
     context = {
-        'scoreboard' : new_list,
         'eastern_conference_standings': eastern_conference_standings.to_dict('records'),
         'western_conference_standings': western_conference_standings.to_dict('records'),
-    #    'games_today' : games_df.to_dict('records'),
-    #    'params' : params.to_dict('records')
     }
-    return render(request, "home.html", context)
+    return render(request, "conference_standings.html", context)
+    
 
 
 
@@ -123,7 +128,7 @@ def get_one_season_playergamelog(request, id, season):
     context = {
         "game_log_curr_season_df" : game_log_curr_season_df.to_dict('records')
     }
-    return render(request, "player_gamelogs/one_season_playergamelog.html", context )
+    return render(request, "player_logs/one_season_playergamelog.html", context )
 
 def get_all_seasons_player_gamelog(request, id):
     game_log_all_seasons = playergamelog.PlayerGameLog(player_id=id, season=SeasonAll.all)
@@ -132,7 +137,57 @@ def get_all_seasons_player_gamelog(request, id):
     context = {
         "game_log_all_seasons" : game_log_all_seasons_df.to_dict('records')
     }
-    return render(request, "player_gamelogs/all_seasons_playergamelog.html", context)
+    return render(request, "player_logs/all_seasons_playergamelog.html", context)
+
+def get_pre_season_stats(request, id):
+    profile = playerprofilev2.PlayerProfileV2(player_id=id)
+    totals_pre_season_df = profile.season_totals_preseason.get_data_frame()
+
+    context = {
+        "totals_pre_season" : totals_pre_season_df.to_dict('records'),
+    }
+
+    return render(request, "player_logs/pre_season.html", context)
+
+def get_regular_season_stats(request, id):
+    profile = playerprofilev2.PlayerProfileV2(player_id=id)
+    totals_regular_season_df = profile.season_totals_regular_season.get_data_frame()
+
+    context = {
+        "totals_regular_season" : totals_regular_season_df.to_dict('records'),
+    }
+
+    return render(request, "player_logs/regular_season.html", context)
+
+def get_post_season_stats(request, id):
+    profile = playerprofilev2.PlayerProfileV2(player_id=id)
+    totals_post_season_df = profile.season_totals_post_season.get_data_frame()
+
+    context = {
+        "totals_post_season" : totals_post_season_df.to_dict('records'),
+    }
+
+    return render(request, "player_logs/post_season.html", context)
+
+def get_rankings_regular_season_stats(request, id):
+    profile = playerprofilev2.PlayerProfileV2(player_id=id)
+    rankings_regular_season_df = profile.season_rankings_regular_season.get_data_frame().fillna(0)
+
+    context = {
+        "rankings_regular_season" : rankings_regular_season_df.to_dict('records'),
+    }
+
+    return render(request, "player_logs/rankings_regular_season.html", context)
+
+def get_rankings_post_season_stats(request, id):
+    profile = playerprofilev2.PlayerProfileV2(player_id=id)
+    rankings_post_season_df = profile.season_rankings_post_season.get_data_frame().fillna(0)
+
+    context = {
+       "rankings_post_season" : rankings_post_season_df.to_dict('records'),
+    }
+
+    return render(request, "player_logs/rankings_post_season.html", context)
 
 def get_player_dashboard(request, id):
     load_stats = playerdashboardbyyearoveryear.PlayerDashboardByYearOverYear(player_id=id)
@@ -145,17 +200,13 @@ def get_player_dashboard(request, id):
         "per_year_stats" :  per_year_stats_df.to_dict('records'),
         "current_year_stats" : current_year_stats_df.to_dict('records'),
     }
-    return render(request, "player_dashboard.html" ,context)
+    return render(request, "player_logs/player_dashboard.html" ,context)
 
 
 def player_profile(request, id):
     profile = playerprofilev2.PlayerProfileV2(player_id=id)
     next_game_df = profile.next_game.get_data_frame()
     totals_pre_season_df = profile.season_totals_preseason.get_data_frame()
-    totals_regular_season_df = profile.season_totals_regular_season.get_data_frame()
-    totals_post_season_df = profile.season_totals_post_season.get_data_frame()
-    rankings_regular_season_df = profile.season_rankings_regular_season.get_data_frame().fillna(0)
-    rankings_post_season_df = profile.season_rankings_post_season.get_data_frame().fillna(0)
     # career_highs_df = profile.career_highs.get_data_frame()
     # season_highs_df = profile.season_highs.get_data_frame()
 
@@ -171,22 +222,8 @@ def player_profile(request, id):
                 player_info.update(player)
     new_player_info = pd.DataFrame(player_info, index=pd.Series(player_info.pop("is_active")), columns=["id", "full_name", "first_name", "last_name"])
  
-    player_awards = playerawards.PlayerAwards(player_id=id)
-    player_awards_df = player_awards.player_awards.get_data_frame()
-
-    career_stats = playercareerstats.PlayerCareerStats(per_mode36="PerGame", player_id=id)
-    career_stats_regular_season_df = career_stats.career_totals_regular_season.get_data_frame()
-
-
     context = {
        "next_game" : next_game_df.to_dict('records'),
-       "totals_pre_season" : totals_pre_season_df.to_dict('records'),
-       "totals_regular_season" : totals_regular_season_df.to_dict('records'),
-       "totals_post_season" : totals_post_season_df.to_dict('records'),
-       "rankings_post_season" : rankings_post_season_df.to_dict('records'),
-       "rankings_regular_season" : rankings_regular_season_df.to_dict('records'),
-       "player_awards" : player_awards_df.to_dict('records'),
-       "career_stats_regular_season" : career_stats_regular_season_df.to_dict('records'),
        "player_info" : new_player_info.to_dict("records"),
        "year" : year - 1
 
