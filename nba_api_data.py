@@ -171,23 +171,52 @@ get_all_seasons_player_gamelog(id="1626164")
 player_profile(id="1626164")
 get_player_dashboard(id="1626164")
 
-# def box_score_data(request, id):
-#     game_box_score = boxscoretraditionalv2.BoxScoreTraditionalV2(game_id=id)
-#     player_stats_df = game_box_score.player_stats.get_data_frame().fillna(0)
-#     # print(player_stats_df.columns)
-#     team_stats_df = game_box_score.team_stats.get_data_frame().fillna(0)
-#     starter_bench_stats_df = game_box_score.team_starter_bench_stats.get_data_frame().fillna(0)
-#     # print(team_stats_df.columns)
-#     # print(starter_bench_stats_df.columns)
+def team_profile(id):
+    team_dets = teamdetails.TeamDetails(team_id=id)
+    team_background_df = team_dets.team_background.get_data_frame()
+    
+    years = teamyearbyyearstats.TeamYearByYearStats(team_id=id)
+    years_stats_df = years.team_stats.get_data_frame().fillna(0)
+    years_stats_df = years_stats_df.tail(10)
 
-#     context = {
-#         "player_stats" : player_stats_df.to_dict('records'),
-#         "team_stats" : team_stats_df.to_dict('records'),
-#         "starter_bench_stats" : starter_bench_stats_df.to_dict('records'),
-#     }
-#     return render(request, "box_score.html" , context)
+    team_games = leaguegamefinder.LeagueGameFinder(team_id_nullable=id)
+    team_games_df = team_games.league_game_finder_results.get_data_frame()
+    team_games_df = team_games_df.head(10)
 
+    with open("json/team_games.json", "w") as outfile:
+        json.dump(team_games_df.to_dict('records'), outfile)
 
+    with open("json/team_background.json", "w") as outfile:
+        json.dump(team_background_df.to_dict('records'), outfile) 
+
+    with open("json/team_years_stats.json", "w") as outfile:
+        json.dump(years_stats_df.to_dict('records'), outfile) 
+
+    return f"success"
+
+team_profile(id=1610612756)   
+
+def box_score_data(id):
+    game_box_score = boxscoretraditionalv2.BoxScoreTraditionalV2(game_id=id)
+    player_stats_df = game_box_score.player_stats.get_data_frame().fillna(0)
+    # print(player_stats_df.columns)
+    team_stats_df = game_box_score.team_stats.get_data_frame().fillna(0)
+    starter_bench_stats_df = game_box_score.team_starter_bench_stats.get_data_frame().fillna(0)
+    # print(team_stats_df.columns)
+    # print(starter_bench_stats_df.columns)
+
+    with open("json/game_player_stats.json", "w") as outfile:
+        json.dump(player_stats_df.to_dict('records'), outfile)
+    
+    with open("json/game_team_stats.json", "w") as outfile:
+        json.dump(team_stats_df.to_dict('records'), outfile)
+    
+    with open("json/game_starter_bench_stats.json", "w") as outfile:
+        json.dump(starter_bench_stats_df.to_dict('records'), outfile)
+
+    return f"success"
+
+box_score_data(id="0042200172")
 
 
     
@@ -221,38 +250,7 @@ get_player_dashboard(id="1626164")
 #
 
 
-# def team_profile(request, id):
-#     team_dets = teamdetails.TeamDetails(team_id=id)
-#     team_history_df = team_dets.team_history.get_data_frame()
-#     team_background_df = team_dets.team_background.get_data_frame()
-#     team_awards_championships_df = team_dets.team_awards_championships.get_data_frame()
-#     team_awards_conf_df = team_dets.team_awards_conf.get_data_frame()
-#     team_awards_div_df = team_dets.team_awards_div.get_data_frame()
-#     team_hof_df = team_dets.team_hof.get_data_frame()
-#     team_retired_df = team_dets.team_retired.get_data_frame()
 
-#     years = teamyearbyyearstats.TeamYearByYearStats(team_id=id)
-#     years_stats_df = years.team_stats.get_data_frame().fillna(0)
-#     years_stats_df = years_stats_df.tail(10)
-
-#     team_games = leaguegamefinder.LeagueGameFinder(team_id_nullable=id)
-#     team_games_df = team_games.league_game_finder_results.get_data_frame()
-#     team_games_df = team_games_df.head(10)
-
-#     context = {
-#         "team_awards_championships" : team_awards_championships_df.to_dict('records'),
-#         "team_awards_conf" : team_awards_conf_df.to_dict('records'),
-#         "team_awards_div" : team_awards_div_df.to_dict('records'),
-#         "team_history" : team_history_df.to_dict('records'),
-#         "team_background" : team_background_df.to_dict('records'),
-#         "team_hof" : team_hof_df.to_dict('records'),
-#         "team_retired" : team_retired_df.to_dict('records'),
-
-#         "years_stats" : years_stats_df.to_dict('records'),
-#         "team_games" : team_games_df.to_dict('records'),
-#     }
-
-#     return render(request, "team_profile.html", context)
 
 # def playoffs_data(request):
 #     playoffs = playoffpicture.PlayoffPicture(league_id="00", season_id=22021)

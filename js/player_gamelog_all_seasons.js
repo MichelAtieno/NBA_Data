@@ -6,9 +6,8 @@ fetch("../json/game_log_all_seasons.json")
     let placeholder = document.querySelector("#data-output");
     let out = "";
     for(let glas of all_season_games){
-        out += ` <td data-title="GAME_ID"><a href="">${ glas.Game_ID }</a></td>
-                <td data-title="GAME">${ glas.GAME_DATE }</td>
-                <td data-title="MATCHUP">${ glas.MATCHUP }</td>
+        out += `<td data-title="GAME">${ glas.GAME_DATE }</td>
+                <td data-title="MATCHUP"><a href="game_box_score.html">${ glas.MATCHUP }</a></td>
                 <td data-title="WL">${ glas.WL }</td>
                 <td data-title="MIN">${ glas.MIN }</td>
                 <td data-title="FG_PCT">${ glas.FG_PCT }</td>

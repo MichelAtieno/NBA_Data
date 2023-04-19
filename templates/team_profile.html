@@ -1,0 +1,101 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+      <link href="../css/styles.css" rel="stylesheet">
+	<title></title>
+
+	<!-- INCLUDING JQUERY-->
+
+
+		
+</head>
+
+<body>
+    <div class="container">
+    <div>
+        <h3><b>LAST TEN GAMES</b></h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">GAME_DATE</th>
+                <th scope="col">MatchUp</th>
+                <th scope="col">WL</th>
+                <th scope="col">MIN</th>
+                <th scope="col">FGPCT</th>
+                <th scope="col">FG3PCT</th>
+                <th scope="col">REB</th>
+                <th scope="col">AST</th>
+                <th scope="col">STL</th>
+                <th scope="col">BLK</th>
+                <th scope="col">TOV</th>
+                <th scope="col">PTS</th>
+            </tr>
+            </thead>
+                <tbody id="data-output">
+            
+                </tbody>
+        </table>
+    </div>
+    <br>
+    <div>
+        <h3><b>TEAM BACKGROUND</b></h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">TEAM</th>
+                <th scope="col">YEAR FOUNDED</th>
+                <th scope="col">CITY</th>
+                <th scope="col">ARENA</th>
+                <th scope="col">ARENACAP</th>
+                <th scope="col">OWNER</th>
+                <th scope="col">GM</th>
+                <th scope="col">HEADCOACH</th>
+                <th scope="col">DLEAGUEAFFIL</th>
+            </tr>
+            </thead>
+                <tbody id="data-output1">
+            
+                </tbody>
+        </table>
+    </div>
+    <br>
+    <div>
+        <h3><b>YEARLY STATS SUMMARY</b></h3>
+       <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">YEAR</th>
+            <th scope="col">W</th>
+            <th scope="col">L</th>
+            <th scope="col">W_PCT</th>
+            <th scope="col">C_RANK</th>
+            <th scope="col">D_RANK</th>
+            <th scope="col">FINALS</th>
+            <th scope="col">FG_PCT</th>
+            <th scope="col">FG3_PCT</th>
+            <th scope="col">REB</th>
+            <th scope="col">AST</th>
+            <th scope="col">STL</th>
+            <th scope="col">TOV</th>
+            <th scope="col">BLK</th>
+            <th scope="col">PTS</th>
+            <th scope="col">PTS_RANK</th>
+        </tr>
+        </thead>
+        <tbody id="data-output2">
+            
+        </tbody>
+    </table>
+    </div>
+    </div>
+
+    <script type="text/javascript" src='../js/team_profile.js'></script>
+	
+</body>
+
+</html>
