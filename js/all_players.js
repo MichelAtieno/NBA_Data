@@ -7,7 +7,7 @@ fetch("../json/active_players.json")
     let out = "";
     for(let player of players){
         out += `<td data-title="ID">${player.id}</td>
-                <td data-title="Full Name">${player.full_name}</td>
+                <td data-title="Full Name"><a href="player_profile.html" >${player.full_name}</a></td>
                 <td data-title="First Name">${player.first_name}</td>
                 <td data-title="Last Name">${player.last_name}</td>
             </tr>

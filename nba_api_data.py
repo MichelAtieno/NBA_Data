@@ -151,9 +151,25 @@ def player_profile(id):
      
     return f"success"
 
+def get_player_dashboard(id):
+    load_stats = playerdashboardbyyearoveryear.PlayerDashboardByYearOverYear(player_id=id)
+    per_year_stats_df = load_stats.by_year_player_dashboard.get_data_frame()
+    current_year_stats_df =load_stats.overall_player_dashboard.get_data_frame()
+    per_year_stats_df["MIN"] = per_year_stats_df["MIN"].apply(np.ceil)
+    current_year_stats_df["MIN"] = current_year_stats_df["MIN"].apply(np.ceil)
+
+    with open("json/player_per_year_stats.json", "w") as outfile:
+        json.dump(per_year_stats_df.to_dict('records'), outfile)
+    
+    with open("json/player_current_year_stats.json", "w") as outfile:
+        json.dump(current_year_stats_df.to_dict('records'), outfile)
+
+    return f"success"
+
 get_one_season_playergamelog(id="1626164", season="2022")
 get_all_seasons_player_gamelog(id="1626164")
 player_profile(id="1626164")
+get_player_dashboard(id="1626164")
 
 # def box_score_data(request, id):
 #     game_box_score = boxscoretraditionalv2.BoxScoreTraditionalV2(game_id=id)
@@ -203,23 +219,6 @@ player_profile(id="1626164")
 
 
 #
-
-
-
-# def get_player_dashboard(request, id):
-#     load_stats = playerdashboardbyyearoveryear.PlayerDashboardByYearOverYear(player_id=id)
-#     per_year_stats_df = load_stats.by_year_player_dashboard.get_data_frame()
-#     current_year_stats_df =load_stats.overall_player_dashboard.get_data_frame()
-#     per_year_stats_df["MIN"] = per_year_stats_df["MIN"].apply(np.ceil)
-#     current_year_stats_df["MIN"] = current_year_stats_df["MIN"].apply(np.ceil)
-
-#     context = {
-#         "per_year_stats" :  per_year_stats_df.to_dict('records'),
-#         "current_year_stats" : current_year_stats_df.to_dict('records'),
-#     }
-#     return render(request, "player_logs/player_dashboard.html" ,context)
-
-
 
 
 # def team_profile(request, id):
