@@ -11,9 +11,54 @@ import pandas as pd
 import itertools
 from decimal import *
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
 # Create your views here.
 # def home(request):
 #     return HttpResponse("Hey Mish")
+
+@api_view(["GET"])
+def active_player_data_api(request):
+    all_players = players.get_players()
+    active_players = [player for player in all_players if player["is_active"] == True]
+
+    return Response(active_players)
+
+@api_view(["GET"])
+def player_profile_api(request, id):
+    if request.method == "GET":
+        profile = playerprofilev2.PlayerProfileV2(player_id=id)
+        next_game_df = profile.next_game.get_data_frame()
+        totals_pre_season_df = profile.season_totals_preseason.get_data_frame()
+        # career_highs_df = profile.career_highs.get_data_frame()
+        # season_highs_df = profile.season_highs.get_data_frame()
+
+        today = datetime.now()
+        year = today.year
+        player_id = list(totals_pre_season_df["PLAYER_ID"])
+        player_id = list(set(player_id))
+        all_players = players.get_players()
+        player_info = {}
+        for player in all_players:
+            for p in player_id:
+                if player["id"] == p:
+                    player_info.update(player)
+        new_player_info = pd.DataFrame(player_info, index=pd.Series(player_info.pop("is_active")), columns=["id", "full_name", "first_name", "last_name"])
+    
+        context = {
+        "next_game" : next_game_df.to_dict('records'),
+        "player_info" : new_player_info.to_dict("records"),
+        "year" : year - 1
+
+        #    "career_highs" :  career_highs_df.to_dict('records'),
+        #    "season_highs" : season_highs_df.to_dict('records'),
+
+        }
+
+        return Response(context)
+    return Response(status.HTTP_404_NOT_FOUND)
 
 def active_player_data(request):
     all_players = players.get_players()
