@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from nba_api.stats.static import teams, players
-from nba_api.stats.endpoints import playercareerstats, playergamelog, leaguegamefinder, scoreboardv2, boxscoresummaryv2, playerprofilev2, teamdetails, teamyearbyyearstats, playerawards, playerdashboardbyyearoveryear, leaguegamefinder,  boxscoretraditionalv2, playernextngames, playoffpicture
+from nba_api.stats.endpoints import playercareerstats, playergamelog, playergamelogs, leaguegamefinder, scoreboardv2, boxscoresummaryv2, playerprofilev2, teamdetails, teamyearbyyearstats, playerawards, playerdashboardbyyearoveryear, leaguegamefinder,  boxscoretraditionalv2, playernextngames, playoffpicture
 from nba_api.stats.library.parameters import SeasonAll
 import json
 import time
@@ -114,7 +114,7 @@ def home(request):
         game_info_data["GAME_ID"] = bs["GAME_ID"]
         merged_df = pd.merge(new_scoreboard_, game_info_data, on="GAME_ID")
         # print(merged_df)
-        newest_scoreboard = merged_df.groupby(["GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join, 'ATTENDANCE' : 'sum'})
+        newest_scoreboard = merged_df.groupby(["GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join, 'ATTENDANCE' : 'sum', 'GAME_ID' : ' '.join})
         new_list.append(newest_scoreboard.to_dict('records'))
     
     context = {
@@ -169,7 +169,7 @@ def scoreboard_data(request, game_date):
 def get_one_season_playergamelog(request, id, season):
     game_log_curr_season = playergamelog.PlayerGameLog(player_id=id, season=season)
     game_log_curr_season_df = game_log_curr_season.player_game_log.get_data_frame()
-    
+
     context = {
         "game_log_curr_season_df" : game_log_curr_season_df.to_dict('records')
     }
@@ -266,11 +266,18 @@ def player_profile(request, id):
             if player["id"] == p:
                 player_info.update(player)
     new_player_info = pd.DataFrame(player_info, index=pd.Series(player_info.pop("is_active")), columns=["id", "full_name", "first_name", "last_name"])
+
+    player_games = leaguegamefinder.LeagueGameFinder(player_id_nullable=id)
+    player_games_df = player_games.league_game_finder_results.get_data_frame()
+    player_games_df = player_games_df.head(10)
+    player_games_df.to_csv('static/csvs/last_10_player_games.csv', encoding='utf-8')
  
     context = {
        "next_game" : next_game_df.to_dict('records'),
        "player_info" : new_player_info.to_dict("records"),
-       "year" : year - 1
+       "year" : year - 1,
+       "player_games" : player_games_df.to_dict("records"),
+    #    "json_player_games" : json.loads(json_data)
 
     #    "career_highs" :  career_highs_df.to_dict('records'),
     #    "season_highs" : season_highs_df.to_dict('records'),
@@ -312,7 +319,7 @@ def team_profile(request, id):
     return render(request, "team_profile.html", context)
 
 def playoffs_data(request):
-    playoffs = playoffpicture.PlayoffPicture(league_id="00", season_id=22021)
+    playoffs = playoffpicture.PlayoffPicture(league_id="00", season_id=22022)
     east_conf_playoff_picture_df = playoffs.east_conf_playoff_picture.get_data_frame()
     east_conf_standings_df = playoffs.east_conf_standings.get_data_frame()
     east_conf_remaining_games_df = playoffs.east_conf_remaining_games.get_data_frame()
