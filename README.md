@@ -8,6 +8,7 @@ Data Visualization project using basketball data from the nba_api
 You can view project on https://nba-data-app.onrender.com/active_players
 
 ### Website Routes
+    - / - Home Page
     - /all_teams - List of all teams in the NBA.
     - /active_players - List of all active players.
     - /player/<id>&<season> - Get player's gamelog for one season for the Regular Season.
