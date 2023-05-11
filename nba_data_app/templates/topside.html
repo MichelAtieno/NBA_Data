@@ -10,7 +10,7 @@
                  {% for bs in s %}
                     <p>{{ bs.TEAM_CITY_NAME }} </p>
                     <p>{{ bs.PTS }} </p>
-                    <p><a href="{% url 'nba_data_app:box_score_data' id=bs.GAME_ID %}">{{ bs.GAME_ID }}</a></p>
+                    <!-- <p><a href="{% url 'nba_data_app:box_score_data' id=bs.GAME_ID %}">{{ bs.GAME_ID }}</a></p> -->
                  {% endfor %}
                 {% endfor %}
             </div>
