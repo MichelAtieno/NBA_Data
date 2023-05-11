@@ -1,4 +1,4 @@
-## Project SMS-Data
+## Project NBA-Data
 ### By Michel Atieno, created on March 2023.
 
 ### Description
