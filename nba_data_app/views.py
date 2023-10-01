@@ -144,25 +144,25 @@ def home(request):
 
     ######## BOXSCORE DATA
 
-    games = scoreboardv2.ScoreboardV2(game_date=date.today() - timedelta(days=1))
-    #line_Score endpoint
-    games_line_score = games.line_score.get_data_frame()
-    new_scoreboard_ = games_line_score.groupby(["GAME_SEQUENCE","GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join })
-    def uniq(lst):
-        for _, grp in itertools.groupby(lst, lambda d: (d['GAME_ID'])):
-            yield list(grp)[0]
-    box_score_data = games_line_score[["GAME_ID"]]
-    box_score_game_ids = list(uniq(box_score_data.to_dict('records')))
-    new_list = []
-    for bs in box_score_game_ids:
-        # print(ns["GAME_ID"])
-        box_score = boxscoresummaryv2.BoxScoreSummaryV2(game_id= bs["GAME_ID"])
-        game_info_data = box_score.game_info.get_data_frame()
-        game_info_data["GAME_ID"] = bs["GAME_ID"]
-        merged_df = pd.merge(new_scoreboard_, game_info_data, on="GAME_ID")
-        # print(merged_df)
-        newest_scoreboard = merged_df.groupby(["GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join, 'ATTENDANCE' : 'sum', 'GAME_ID' : ' '.join})
-        new_list.append(newest_scoreboard.to_dict('records'))
+    # games = scoreboardv2.ScoreboardV2(game_date=date.today() - timedelta(days=1))
+    # #line_Score endpoint
+    # games_line_score = games.line_score.get_data_frame()
+    # new_scoreboard_ = games_line_score.groupby(["GAME_SEQUENCE","GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join })
+    # def uniq(lst):
+    #     for _, grp in itertools.groupby(lst, lambda d: (d['GAME_ID'])):
+    #         yield list(grp)[0]
+    # box_score_data = games_line_score[["GAME_ID"]]
+    # box_score_game_ids = list(uniq(box_score_data.to_dict('records')))
+    # new_list = []
+    # for bs in box_score_game_ids:
+    #     # print(ns["GAME_ID"])
+    #     box_score = boxscoresummaryv2.BoxScoreSummaryV2(game_id= bs["GAME_ID"])
+    #     game_info_data = box_score.game_info.get_data_frame()
+    #     game_info_data["GAME_ID"] = bs["GAME_ID"]
+    #     merged_df = pd.merge(new_scoreboard_, game_info_data, on="GAME_ID")
+    #     # print(merged_df)
+    #     newest_scoreboard = merged_df.groupby(["GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join, 'ATTENDANCE' : 'sum', 'GAME_ID' : ' '.join})
+    #     new_list.append(newest_scoreboard.to_dict('records'))
 
     ######## SEASONS PLAYER HAS BEEN IN CURRENT TEAM
     
@@ -219,7 +219,7 @@ def home(request):
     teams_played_in['TEAMS_PLAYED_IN'] = teams_played_in['TEAMS_PLAYED_IN'].str.replace('{', '').str.replace('}', '').str.replace("'", '')
     
     context = {
-        'scoreboard' : new_list,
+        # 'scoreboard' : new_list,
         # "team_frequency_count" :  team_frequency_count.to_dict("records"),
     #    'games_today' : games_df.to_dict('records'),
     #    'params' : params.to_dict('records')
