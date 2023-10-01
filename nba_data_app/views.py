@@ -9,6 +9,7 @@ from datetime import date, datetime, timedelta
 import numpy as np
 import pandas as pd
 import itertools
+import re
 from decimal import *
 
 from rest_framework.decorators import api_view
@@ -61,9 +62,8 @@ def player_profile_api(request, id):
     return Response(status.HTTP_404_NOT_FOUND)
 
 def active_player_data(request):
-    all_players = players.get_players()
-    active_players = [player for player in all_players if player["is_active"] == True]
-
+    active_players = players.get_active_players()
+   
     context = {
         'active_players' : active_players
     }
@@ -71,6 +71,7 @@ def active_player_data(request):
 
 def team_data(request):
     all_teams = teams.get_teams()
+  
     context = {
         'all_teams' : all_teams,
     }
@@ -93,10 +94,56 @@ def box_score_data(request, id):
     }
     return render(request, "box_score.html" , context)
 
+def get_teams_played_by_player():
+    active_players = players.get_active_players()
+    teams_played = []
+    # frequency_count = []
+    for player in active_players:
+        load_stats = playerdashboardbyyearoveryear.PlayerDashboardByYearOverYear(player_id=player["id"])
+        per_year_stats_df = load_stats.by_year_player_dashboard.get_data_frame()
+        per_year_stats_df["MIN"] = per_year_stats_df["MIN"].apply(np.ceil)
+        # print(per_year_stats_df.columns)
+        per_year_stats_df["PLAYER_ID"] = player["id"]
+        per_year_stats_df = per_year_stats_df[["TEAM_ABBREVIATION", "GROUP_VALUE", "PLAYER_ID"]]
+        teams_played = per_year_stats_df.to_dict("records")
+    teams_played_df = pd.DataFrame(teams_played)
+    teams_played_df.to_csv('static/csvs/teams_player_played_in.csv', encoding='utf-8')
+    # 
+    # team_frequency_count_df = pd.read_csv('static/csvs/teams_player_played_in.csv')
+
+    return
+
+def get_current_team_for_player():
+    current_team = []
+    active_players = players.get_active_players()
+    for player in active_players:
+        load_stats = playerdashboardbyyearoveryear.PlayerDashboardByYearOverYear(player_id= player["id"])
+        per_year_stats_df = load_stats.by_year_player_dashboard.get_data_frame()
+        per_year_stats_df["MIN"] = per_year_stats_df["MIN"].apply(np.ceil)
+        teams_played = per_year_stats_df[["TEAM_ABBREVIATION", "GROUP_VALUE"]]
+        teams_played["PLAYER_ID"] = player["id"]
+        teams_played = teams_played.iloc[:1]
+        current_team.append(teams_played.to_dict("records"))
+    current_team_df = pd.DataFrame(current_team)
+    current_team_df.to_csv('static/csvs/cuurent_player_team.csv', encoding='utf-8')
+
+    return
+
+def get_active_players_to_csv():
+    active_players = players.get_active_players()
+    active_players_df = pd.DataFrame(active_players)
+    active_players_df.to_csv('active_players.csv', encoding='utf-8')
+
+    return
+    
+
 def home(request):
     # games = scoreboardv2.ScoreboardV2(game_date=date.today())
     # games = games.game_header.get_data_frame()
     # games = games.available.get_data_frame()
+
+    ######## BOXSCORE DATA
+
     games = scoreboardv2.ScoreboardV2(game_date=date.today() - timedelta(days=1))
     #line_Score endpoint
     games_line_score = games.line_score.get_data_frame()
@@ -116,11 +163,70 @@ def home(request):
         # print(merged_df)
         newest_scoreboard = merged_df.groupby(["GAME_ID","TEAM_CITY_NAME"]).agg({'TEAM_CITY_NAME' : ' '.join, 'TEAM_WINS_LOSSES': ' '.join, 'TEAM_ID': 'first', 'PTS':'sum', 'GAME_DATE_EST': ' '.join, 'ATTENDANCE' : 'sum', 'GAME_ID' : ' '.join})
         new_list.append(newest_scoreboard.to_dict('records'))
+
+    ######## SEASONS PLAYER HAS BEEN IN CURRENT TEAM
+    
+    team_frequency_count_df = pd.read_csv('static/csvs/player_teams.csv')
+    frequency_count = team_frequency_count_df.groupby(["TEAM_ABBREVIATION", "PLAYER_ID"]).count()
+    frequency_count.reset_index(inplace=True)
+    frequency_count.rename(columns = {'Unnamed: 0':'SEASON_COUNT'}, inplace = True)
+    frequency_count = frequency_count.sort_values(by=['SEASON_COUNT'], ascending=False)
+    frequency_count.reset_index(inplace=True)
+    frequency_count = frequency_count.drop(['index', 'GROUP_VALUE'], axis=1)
+
+    curr_team_df = team_frequency_count_df[team_frequency_count_df["GROUP_VALUE"] == "2022-23"]
+    curr_team = curr_team_df[["TEAM_ABBREVIATION", "GROUP_VALUE", "PLAYER_ID"]]
+    curr_team.reset_index(inplace=True)
+    curr_team = curr_team.drop(['index'], axis=1)
+
+    columns_to_compare = ['TEAM_ABBREVIATION', 'PLAYER_ID']
+    current_team_df = pd.merge(frequency_count, curr_team , on=columns_to_compare, suffixes=('frequency_count', 'curr_team '), how='outer')
+    
+    current_team_df["GROUP_VALUE"] = current_team_df["GROUP_VALUE"].replace("2022-23", True)
+    current_team_df["GROUP_VALUE"] = current_team_df["GROUP_VALUE"].notna()
+    current_team_df.rename(columns = {'GROUP_VALUE':'CURRENT_TEAM'}, inplace = True)
+
+    active_players = pd.read_csv('static/csvs/active_players.csv')
+
+    ######## NO. OF TEAMS PLAYER HAS BEEN IN
+
+    player_teams_df = pd.read_csv('static/csvs/player_teams.csv')
+    # player_teams = player_teams_df.groupby("PLAYER_ID")["TEAM_ABBREVIATION"].sum()
+    # print(player_teams.column)
+    player_teams=( player_teams_df.groupby(["PLAYER_ID", "TEAM_ABBREVIATION"],as_index=False)
+           .agg(list)
+           .reindex(columns=player_teams_df.columns) ).groupby("PLAYER_ID").count()
+    player_teams.rename(columns = {'TEAM_ABBREVIATION':'NO_OF_TEAMS_PLAYED_IN'}, inplace = True)
+    player_teams = player_teams.drop(['Unnamed: 0', 'GROUP_VALUE'], axis=1)
+    player_teams.reset_index(inplace=True)
+
+    new_df = player_teams_df.groupby("PLAYER_ID").TEAM_ABBREVIATION.agg(['count',','.join])
+    # print(player_teams)
+    new_df.reset_index(inplace=True)
+    new_df = new_df.to_dict("records")
+    # new_list = []
+    # [new_list.append(nd["join"]) for nd in new_df if nd["join"] not in new_list]
+    updated_df = []
+    for nd in new_df:
+        # print(nd["join"])
+        nd["join"] = str(set(nd["join"].split(",")))
+        updated_df.append(nd)
+    updated_df = pd.DataFrame(updated_df)
+    updated_df = updated_df.drop(['count'], axis=1)
+    updated_df.rename(columns = {'join':'TEAMS_PLAYED_IN'}, inplace = True)
+    cols_to_compare = ['PLAYER_ID']
+    teams_played_in = pd.merge(player_teams, updated_df, on=cols_to_compare, suffixes=('player_teams', 'updated_df'), how='outer')
+    teams_played_in['TEAMS_PLAYED_IN'] = teams_played_in['TEAMS_PLAYED_IN'].str.replace('{', '').str.replace('}', '').str.replace("'", '')
     
     context = {
         'scoreboard' : new_list,
+        # "team_frequency_count" :  team_frequency_count.to_dict("records"),
     #    'games_today' : games_df.to_dict('records'),
     #    'params' : params.to_dict('records')
+        "current_team" : current_team_df.to_dict("records"),
+        "active_players" : active_players.to_dict("records"),
+        "player_teams" : teams_played_in.to_dict("records"),
+        # "updated_df" :  updated_df.to_dict("records")
     }
     return render(request, "home.html", context)
 
@@ -180,7 +286,7 @@ def get_all_seasons_player_gamelog(request, id):
     game_log_all_seasons_df = game_log_all_seasons.player_game_log.get_data_frame()
 
     context = {
-        "game_log_all_seasons" : game_log_all_seasons_df.to_dict('records')
+        "game_log_all_seasons" : game_log_all_seasons_df.to_dict('records'),
     }
     return render(request, "player_logs/all_seasons_playergamelog.html", context)
 
@@ -240,10 +346,16 @@ def get_player_dashboard(request, id):
     current_year_stats_df =load_stats.overall_player_dashboard.get_data_frame()
     per_year_stats_df["MIN"] = per_year_stats_df["MIN"].apply(np.ceil)
     current_year_stats_df["MIN"] = current_year_stats_df["MIN"].apply(np.ceil)
+    # print(per_year_stats_df.columns)
+    teams_played = per_year_stats_df[["TEAM_ABBREVIATION", "GROUP_VALUE"]]
+    team_frequency_count = teams_played.groupby("TEAM_ABBREVIATION").count()
+    team_frequency_count.reset_index(inplace=True)
 
     context = {
         "per_year_stats" :  per_year_stats_df.to_dict('records'),
         "current_year_stats" : current_year_stats_df.to_dict('records'),
+        "teams_played" : teams_played.to_dict('records'),
+        "team_frequency_count": team_frequency_count.to_dict('records'),
     }
     return render(request, "player_logs/player_dashboard.html" ,context)
 

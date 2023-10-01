@@ -1,4 +1,4 @@
-#!/home/michel/Desktop/2023/NBA_Data/virtual/bin/python3.10
+#!/home/michel/Desktop/Practice/NBA_Data/virtual/bin/python3.10
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 

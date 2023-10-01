@@ -5,6 +5,90 @@
 {% block content %}
 
 {% include "topside.html" %}
+    <br/>
+    <div class="articles">
+        <div class="card">
+        <h3>Players with longest tenure in their current teams</h3>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">TEAM</th>
+                        <th scope="col">PLAYER </th>
+                        <th scope="col">SEASON COUNT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for ct in current_team %}
+                    {% for player in active_players %}
+                    {% if ct.CURRENT_TEAM == True and player.id == ct.PLAYER_ID and ct.SEASON_COUNT > 9 %}
+                    <tr>
+                      <td data-title="TEAM">{{ ct.TEAM_ABBREVIATION }}</td>
+                      <td data-title="PLAYER_ID">{{ player.full_name }}</td>
+                      <td data-title="SEASON_COUNT">{{ ct.SEASON_COUNT }}</td>
+                      <!-- <td data-title="TEAM">{{ t.TEAM_ABBREVIATION }}</td> -->
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table> 
+            </div>
+            
+            <div class="col-md-4">
+               
+                
+            </div>
+            
+        </div>
+        </div>
+        <br>
+        <div class="card">
+            <h3>Players on the move</h3>
+            <div class="row">
+                <div class="col-md-1">
+                    <h3></h3>
+                    
+                </div>
+                <div class="col-md-10">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                          
+                            <th scope="col">PLAYER </th>
+                            <th scope="col">NO. OF TEAMS</th>
+                            <th scope="col">TEAMS_PLAYED_IN</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for pt in player_teams %}
+                        {% for player in active_players %}
+                       
+                        {% if player.id == pt.PLAYER_ID and pt.NO_OF_TEAMS_PLAYED_IN > 9 %}
+                        <tr>
+                          <td data-title="PLAYER">{{ player.full_name }}</td>
+                          <td data-title="NO. OF TEAMS">{{ pt.NO_OF_TEAMS_PLAYED_IN}}</td>
+                          <td data-title="TEAMS_PLAYED_IN">{{ pt.TEAMS_PLAYED_IN }}</td>
+                        </tr>
+                        {% endif %}
+
+                        {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table> 
+                </div>
+                
+                <div class="col-md-1">
+                    <h3></h3>
+                    
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
     <!-- <div>
         <h1></h1>
         

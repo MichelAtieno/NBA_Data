@@ -52,6 +52,52 @@
     </style>
 </head>
 <body>
+      <div class="row">
+        <div class="col-md-4">
+              <h3>Teams Played</h3>
+              <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">SEASON</th>
+                    <th scope="col">TEAM</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for t in teams_played %}
+                <tr>
+                  <td data-title="SEASON">{{ t.GROUP_VALUE }}</td>
+                  <td data-title="TEAM">{{ t.TEAM_ABBREVIATION }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table> 
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+          <h3>Seasons Played</h3>
+              <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">TEAM</th>
+                    <th scope="col">SEASON COUNT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for t in team_frequency_count %}
+              
+                <tr>
+                  <td data-title="">{{ t.TEAM_ABBREVIATION }}</td>
+                  <td data-title="TEAM">{{ t.GROUP_VALUE }}</td>
+                </tr>
+            
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-2"></div>
+        
+      </div>
+      <br/>
         <div>
             <h3>CURRENT YEAR STATS</h3>
             <table class="table">
